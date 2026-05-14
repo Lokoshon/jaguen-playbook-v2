@@ -1,0 +1,2983 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jaguen — Playbook de Captación v7</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --green: #1D9E75; --green-light: #E1F5EE; --green-dark: #0F6E56;
+    --blue-light: #E6F1FB; --blue: #185FA5;
+    --amber-light: #FAEEDA; --amber: #854F0B;
+    --purple-light: #EEEDFE; --purple: #534AB7;
+    --pink-light: #FBEAF0; --pink: #993556;
+    --coral-light: #FAECE7; --coral: #993C1D;
+    --bg: #F7F6F2; --surface: #FFFFFF; --border: #E0DED6;
+    --text: #1A1A18; --text2: #5C5B57; --text3: #9B9994;
+    --radius: 12px; --radius-sm: 8px;
+  }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  .header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 18px 28px; display: flex; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 100; }
+  .logo { font-size: 20px; font-weight: 600; color: var(--green-dark); letter-spacing: -0.5px; }
+  .logo span { color: var(--text3); font-weight: 400; font-size: 13px; margin-left: 8px; }
+  .hbadge { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; }
+  .hbadge-v { background: var(--purple-light); color: var(--purple); }
+  .hbadge-count { margin-left: auto; background: var(--green-light); color: var(--green-dark); }
+
+  .layout { display: grid; grid-template-columns: 235px 1fr; min-height: calc(100vh - 57px); }
+
+  .sidebar { background: var(--surface); border-right: 1px solid var(--border); padding: 20px 14px; position: sticky; top: 57px; height: calc(100vh - 57px); overflow-y: auto; }
+  .sl { font-size: 10px; font-weight: 600; color: var(--text3); letter-spacing: 0.08em; text-transform: uppercase; padding: 0 8px; margin-bottom: 6px; margin-top: 18px; }
+  .sl:first-child { margin-top: 0; }
+  .pbtn { display: flex; align-items: center; gap: 8px; width: 100%; padding: 7px 10px; border-radius: var(--radius-sm); border: none; background: transparent; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; color: var(--text2); transition: all 0.12s; text-align: left; }
+  .pbtn:hover { background: var(--bg); color: var(--text); }
+  .pbtn.active { background: var(--green-light); color: var(--green-dark); }
+  .pdot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .d-all{background:var(--text3);}
+  .d-lead{background:#E24B4A;}
+  .d-oportunidad{background:#E8890C;}
+  .d-prospeccion{background:#1D9E75;}
+  .d-seguimiento{background:#378ADD;}
+  .d-cotizado{background:#EF9F27;}
+  .d-registrado{background:#D4537E;}
+  .d-yacompro{background:#7F77DD;}
+  .d-milestone1{background:#E24B4A;}
+  .step-card.milestone .step-day { background: #FCEBEB; color: #A32D2D; }
+  .step-card.milestone .step-header { background: #FCEBEB22; }
+  .d-cliente{background:#0F6E56;}
+  .pcnt { margin-left: auto; font-size: 11px; background: var(--border); color: var(--text3); padding: 1px 7px; border-radius: 10px; }
+  .agent-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; margin-bottom: 12px; }
+  .agent-ale1 { background: #FCECEA; color: #A32D2D; border: 1px solid #F5B8B5; }
+  .agent-ale2 { background: #FEF3E2; color: #854F0B; border: 1px solid #F5D9A0; }
+  .agent-javier { background: #E1F5EE; color: #0F6E56; border: 1px solid #A3DCCA; }
+  .agent-section { background: var(--bg); border-radius: var(--radius-sm); padding: 14px 16px; margin-bottom: 14px; }
+  .agent-section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--text3); margin-bottom: 10px; }
+  .agent-fn-list { display: flex; flex-direction: column; gap: 6px; }
+  .agent-fn { font-size: 13px; color: var(--text); line-height: 1.5; display: flex; gap: 8px; }
+  .agent-fn-icon { flex-shrink: 0; }
+  .agent-key { background: #FFF8E1; border: 1px solid #FFE082; border-radius: var(--radius-sm); padding: 10px 14px; margin-top: 10px; font-size: 12px; color: #5D4037; line-height: 1.6; }
+  .agent-key strong { font-weight: 700; display: block; margin-bottom: 4px; }
+
+  .main { padding: 28px 32px; max-width: 880px; }
+  .main-header { margin-bottom: 22px; }
+  .main-header h1 { font-size: 24px; font-weight: 600; letter-spacing: -0.5px; }
+  .main-header p { font-size: 14px; color: var(--text2); margin-top: 3px; }
+  .scnt { font-size: 12px; color: var(--text3); margin-top: 6px; }
+
+  .changelog { background: var(--purple-light); border: 1px solid #CECBF6; border-radius: var(--radius); padding: 14px 18px; margin-bottom: 24px; }
+  .cl-title { font-size: 11px; font-weight: 600; color: var(--purple); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+  .cl-items { display: flex; flex-direction: column; gap: 5px; }
+  .cl-item { font-size: 13px; color: #3C3489; display: flex; gap: 8px; align-items: flex-start; line-height: 1.5; }
+  .cl-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--purple); margin-top: 8px; flex-shrink: 0; }
+
+  .phase-divider { display: flex; align-items: center; gap: 10px; margin: 22px 0 10px; }
+  .phase-divider-label { font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.07em; white-space: nowrap; }
+  .phase-divider-sub { font-size: 11px; color: var(--text3); white-space: nowrap; font-weight: 400; }
+  .phase-divider-line { flex: 1; height: 1px; background: var(--border); }
+
+  .step-list { display: flex; flex-direction: column; gap: 8px; }
+  .step-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; transition: box-shadow 0.15s; }
+  .step-card:hover { box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+  .step-card.updated { border-left: 3px solid var(--purple); }
+  .step-card.isnew { border-left: 3px solid var(--green); }
+  .step-header { display: flex; align-items: center; gap: 10px; padding: 12px 16px; cursor: pointer; user-select: none; }
+  .step-n { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text3); min-width: 24px; }
+  .step-day { font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 10px; white-space: nowrap; background: var(--green-light); color: var(--green-dark); }
+  .step-title { font-size: 13.5px; font-weight: 500; color: var(--text); flex: 1; }
+  .step-tags { display: flex; gap: 4px; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end; }
+  .tag { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 9px; }
+  .tag-email { background: var(--blue-light); color: var(--blue); }
+  .tag-call { background: var(--amber-light); color: var(--amber); }
+  .tag-action { background: var(--pink-light); color: var(--pink); }
+  .tag-new { background: var(--green-light); color: var(--green-dark); }
+  .tag-updated { background: var(--purple-light); color: var(--purple); }
+  .step-chev { font-size: 16px; color: var(--text3); transition: transform 0.2s; flex-shrink: 0; margin-left: 4px; }
+  .step-chev.open { transform: rotate(180deg); }
+
+  .step-body { display: none; border-top: 1px solid var(--border); }
+  .step-body.open { display: block; }
+  .tab-bar { display: flex; border-bottom: 1px solid var(--border); background: var(--bg); }
+  .tab { font-size: 12px; font-weight: 500; padding: 9px 16px; cursor: pointer; color: var(--text2); border-bottom: 2px solid transparent; transition: all 0.12s; }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--green-dark); border-bottom-color: var(--green); background: var(--surface); }
+  .pane { display: none; padding: 18px; }
+  .pane.active { display: block; }
+
+  .change-note { background: var(--purple-light); border-left: 3px solid var(--purple); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 9px 13px; margin-bottom: 13px; font-size: 12px; color: #3C3489; line-height: 1.6; }
+  .change-note strong { font-weight: 600; }
+  .email-subject { font-size: 12px; color: var(--text2); margin-bottom: 10px; }
+  .email-subject strong { color: var(--text); }
+  .email-body { background: var(--bg); border-radius: var(--radius-sm); padding: 14px 16px; font-size: 13px; line-height: 1.75; color: var(--text); white-space: pre-wrap; border: 1px solid var(--border); }
+  .psych-section { margin-top: 12px; }
+  .psych-label { font-size: 10px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+  .psych-pills { display: flex; flex-wrap: wrap; gap: 4px; }
+  .psych-pill { font-size: 11px; font-weight: 500; padding: 2px 9px; border-radius: 9px; background: var(--purple-light); color: var(--purple); }
+
+  .script-steps { display: flex; flex-direction: column; }
+  .script-item { padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .script-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .script-tag { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--amber); background: var(--amber-light); padding: 2px 8px; border-radius: 9px; display: inline-block; margin-bottom: 6px; }
+  .script-text { font-size: 13px; line-height: 1.65; color: var(--text); }
+  .script-note { font-size: 11.5px; color: var(--text2); font-style: italic; margin-top: 4px; }
+  .step-timing { font-size: 10px; font-weight: 500; color: var(--amber); background: var(--amber-light); padding: 2px 8px; border-radius: 9px; white-space: nowrap; flex-shrink: 0; }
+
+  .odoo-note { background: var(--coral-light); border: 1px solid #F0997B; border-radius: var(--radius-sm); padding: 10px 14px; margin-bottom: 14px; font-size: 12px; color: var(--coral); line-height: 1.6; }
+  .odoo-note strong { font-weight: 600; }
+
+  .empty { text-align: center; padding: 60px 20px; color: var(--text3); font-size: 14px; }
+
+  /* SALES PITCH / DEMO PITCH PHASES */
+  .d-salespitch { background: #C0392B; }
+  .d-demopitch  { background: #8E44AD; }
+  .step-card.salespitch-card { border-left: 3px solid #C0392B; }
+  .step-card.demopitch-card  { border-left: 3px solid #8E44AD; }
+  .step-day.sp-day { background: #FCECEA; color: #A32D2D; }
+  .step-day.dp-day { background: #F3E8FD; color: #6B21A8; }
+
+  /* DIAGNOSTIC SYSTEM */
+  .diag-wrapper { padding: 18px; }
+  .diag-phase-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text3); margin-bottom: 14px; }
+  .diag-script-block { background: var(--bg); border-radius: var(--radius-sm); padding: 14px 16px; font-size: 13px; line-height: 1.75; color: var(--text); margin-bottom: 16px; border: 1px solid var(--border); white-space: pre-wrap; }
+  .diag-script-block .pause-badge { display: inline-block; background: var(--amber-light); color: var(--amber); font-size: 10px; font-weight: 700; padding: 2px 10px; border-radius: 20px; margin: 4px 0; letter-spacing: .04em; }
+  .diag-q-block { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); margin-bottom: 14px; overflow: hidden; }
+  .diag-q-header { padding: 10px 14px; background: var(--bg); border-bottom: 1px solid var(--border); font-size: 12px; font-weight: 600; color: var(--text2); display: flex; align-items: center; gap: 8px; }
+  .diag-q-num { background: var(--green-light); color: var(--green-dark); font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; }
+  .diag-q-why { font-size: 10px; color: var(--text3); font-weight: 400; margin-left: auto; font-style: italic; }
+  .diag-question { font-size: 14px; font-weight: 600; color: var(--text); padding: 12px 14px 10px; line-height: 1.5; }
+  .diag-options { display: flex; flex-direction: column; gap: 0; border-top: 1px solid var(--border); }
+  .diag-opt { display: flex; align-items: flex-start; gap: 0; cursor: pointer; border-bottom: 1px solid var(--border); transition: background .12s; }
+  .diag-opt:last-child { border-bottom: none; }
+  .diag-opt:hover .diag-opt-btn { background: var(--green-light); }
+  .diag-opt.selected .diag-opt-btn { background: var(--green); color: white; }
+  .diag-opt.selected .diag-opt-reveal { display: block; }
+  .diag-opt-btn { padding: 10px 14px; font-size: 13px; font-weight: 500; color: var(--text); min-width: 220px; border-right: 1px solid var(--border); background: var(--surface); transition: background .12s; flex-shrink: 0; line-height: 1.4; }
+  .diag-opt-reveal { display: none; padding: 10px 14px; flex: 1; }
+  .diag-reveal-meaning { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--text3); margin-bottom: 6px; }
+  .diag-crm-pills { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
+  .diag-crm-pill { font-size: 10px; font-weight: 600; padding: 2px 9px; border-radius: 9px; background: var(--purple-light); color: var(--purple); }
+  .diag-followup { font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .diag-followup strong { color: var(--green-dark); }
+
+  /* RESULTADO DIAGNOSTICO */
+  .diag-result-bar { margin-top: 20px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; display: none; }
+  .diag-result-bar.visible { display: block; }
+  .diag-result-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text3); margin-bottom: 12px; }
+  .diag-metrics { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+  .diag-metric { font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 20px; }
+  .diag-metric.hot    { background: #FCECEA; color: #A32D2D; }
+  .diag-metric.warm   { background: var(--amber-light); color: var(--amber); }
+  .diag-metric.cold   { background: var(--blue-light); color: var(--blue); }
+  .diag-metric.neutral{ background: var(--bg); color: var(--text3); border: 1px solid var(--border); }
+  .diag-next-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--text3); margin-bottom: 8px; }
+  .diag-next-steps { display: flex; flex-wrap: wrap; gap: 6px; }
+  .diag-next-step { font-size: 12px; font-weight: 600; padding: 5px 14px; border-radius: 20px; background: var(--green-light); color: var(--green-dark); border: 1px solid #A3DCCA; cursor: default; }
+  .diag-reset { margin-top: 12px; font-size: 12px; color: var(--text3); cursor: pointer; text-decoration: underline; display: inline-block; }
+  .diag-reset:hover { color: var(--text); }
+  /* INTERACTIVE PITCH WIDGET */
+  .iw { padding: 16px 18px; }
+  .iw-block { margin-bottom: 10px; border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--border); background: var(--surface); }
+  .iw-block-header { padding: 9px 14px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; }
+  .iw-block-header:hover { opacity: .85; }
+  .iw-block-body { padding: 14px 16px; border-top: 1px solid var(--border); display: none; }
+  .iw-block-body.open { display: block; }
+  .iw-chev { margin-left: auto; font-size: 11px; color: var(--text3); transition: transform .2s; }
+  .iw-chev.open { transform: rotate(180deg); }
+  .iw-script { font-size: 13px; line-height: 1.8; color: var(--text); white-space: pre-wrap; margin-bottom: 10px; }
+  .iw-pause { display: inline-block; background: var(--amber-light); color: var(--amber); font-size: 10px; font-weight: 700; padding: 1px 9px; border-radius: 20px; letter-spacing: .04em; }
+  .iw-note { font-size: 11.5px; color: var(--text2); font-style: italic; margin-top: 6px; line-height: 1.55; }
+  .iw-q-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text3); margin-bottom: 4px; }
+  .iw-question { font-size: 13.5px; font-weight: 600; color: var(--text); margin-bottom: 10px; line-height: 1.5; }
+  .iw-opts { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+  .iw-opt { display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; overflow: hidden; transition: border-color .12s; }
+  .iw-opt:hover { border-color: var(--green); }
+  .iw-opt.sel { border-color: var(--green); }
+  .iw-opt-btn { padding: 9px 13px; font-size: 13px; font-weight: 500; color: var(--text); background: var(--bg); display: flex; align-items: center; gap: 8px; }
+  .iw-opt.sel .iw-opt-btn { background: var(--green-light); color: var(--green-dark); }
+  .iw-opt-dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--border); flex-shrink: 0; transition: all .12s; }
+  .iw-opt.sel .iw-opt-dot { background: var(--green); border-color: var(--green); }
+  .iw-opt-detail { display: none; padding: 10px 13px; border-top: 1px solid var(--border); background: var(--surface); }
+  .iw-opt.sel .iw-opt-detail { display: block; }
+  .iw-detail-meaning { font-size: 11px; font-weight: 700; color: var(--text2); margin-bottom: 5px; }
+  .iw-crm-pills { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 6px; }
+  .iw-crm-pill { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 9px; background: var(--purple-light); color: var(--purple); }
+  .iw-detail-fw { font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .iw-detail-fw strong { color: var(--green-dark); }
+  .iw-result { margin-top: 16px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; display: none; }
+  .iw-result.visible { display: block; }
+  .iw-result-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text3); margin-bottom: 10px; }
+  .iw-temp { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; padding: 5px 14px; border-radius: 20px; margin-bottom: 10px; }
+  .iw-temp.hot  { background: #FCECEA; color: #A32D2D; }
+  .iw-temp.warm { background: var(--amber-light); color: var(--amber); }
+  .iw-temp.cold { background: var(--blue-light); color: var(--blue); }
+  .iw-metrics { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 12px; }
+  .iw-metric { font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 9px; background: var(--surface); color: var(--text2); border: 1px solid var(--border); }
+  .iw-fw-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--text3); margin-bottom: 6px; }
+  .iw-fw-steps { display: flex; flex-direction: column; gap: 5px; }
+  .iw-fw-step { font-size: 12px; padding: 7px 12px; border-radius: var(--radius-sm); background: var(--green-light); color: var(--green-dark); font-weight: 600; display: flex; align-items: center; gap: 6px; }
+  .iw-fw-step-sub { font-weight: 400; color: var(--green-dark); opacity: .75; font-size: 11px; }
+  .iw-reset { margin-top: 10px; font-size: 11px; color: var(--text3); cursor: pointer; text-decoration: underline; display: inline-block; }
+  .iw-reset:hover { color: var(--text); }
+
+
+  /* INTERACTIVE CALL SCRIPT */
+  .call-wrap { padding: 16px 18px; }
+  .call-block { margin-bottom: 10px; border-radius: var(--radius-sm); border: 1px solid var(--border); overflow: hidden; }
+  .call-block-header { padding: 10px 14px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; }
+  .call-block-body { padding: 14px 16px; border-top: 1px solid var(--border); display: none; }
+  .call-block-body.open { display: block; }
+  .call-chev { margin-left: auto; font-size: 11px; color: var(--text3); transition: transform .2s; }
+  .call-chev.open { transform: rotate(180deg); }
+  .call-script { font-size: 13px; line-height: 1.8; color: var(--text); white-space: pre-wrap; margin-bottom: 10px; }
+  .call-pause { display: inline-block; background: var(--amber-light); color: var(--amber); font-size: 10px; font-weight: 700; padding: 2px 10px; border-radius: 20px; margin: 4px 0; }
+  .call-note { font-size: 11.5px; color: var(--text2); font-style: italic; margin-top: 6px; }
+  .call-input-row { display: flex; align-items: center; gap: 8px; margin: 8px 0; }
+  .call-input-label { font-size: 11px; font-weight: 700; color: var(--text2); min-width: 140px; }
+  .call-input { flex: 1; padding: 7px 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; background: var(--bg); color: var(--text); font-family: inherit; }
+  .call-input:focus { outline: none; border-color: var(--green); }
+  .call-options { display: flex; flex-direction: column; gap: 6px; margin: 10px 0; }
+  .call-opt { padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; font-size: 13px; font-weight: 500; background: var(--bg); color: var(--text); transition: all .12s; display: flex; align-items: center; gap: 8px; }
+  .call-opt:hover { border-color: var(--green); background: var(--green-light); color: var(--green-dark); }
+  .call-opt.selected { border-color: var(--green); background: var(--green-light); color: var(--green-dark); font-weight: 700; }
+  .call-opt-dot { width: 12px; height: 12px; border-radius: 50%; border: 2px solid currentColor; flex-shrink: 0; }
+  .call-opt.selected .call-opt-dot { background: var(--green); border-color: var(--green); }
+  .call-hidden { display: none; }
+  .call-visible { display: block; }
+  .call-products { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 10px 0; }
+  .call-product-input { padding: 6px 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 12px; background: var(--bg); color: var(--text); font-family: inherit; width: 100%; }
+  .call-product-input:focus { outline: none; border-color: var(--green); }
+  .call-summary { background: var(--bg); border: 1px solid var(--green); border-radius: var(--radius); padding: 14px 16px; margin-top: 16px; display: none; }
+  .call-summary.visible { display: block; }
+  .call-summary-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text3); margin-bottom: 10px; }
+  .call-summary-row { display: flex; gap: 10px; margin-bottom: 6px; font-size: 12px; }
+  .call-summary-key { font-weight: 700; color: var(--text2); min-width: 160px; }
+  .call-summary-val { color: var(--text); }
+  .call-copy-btn { margin-top: 10px; padding: 7px 16px; background: var(--green); color: white; border: none; border-radius: var(--radius-sm); font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; }
+  .call-copy-btn:hover { background: var(--green-d); }
+  .call-reset { margin-top: 8px; font-size: 11px; color: var(--text3); cursor: pointer; text-decoration: underline; display: inline-block; margin-left: 10px; }
+  ::-webkit-scrollbar { width: 5px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* SIDEBAR COLLAPSE */
+  .layout.collapsed { grid-template-columns: 0px 1fr; }
+  .layout.collapsed .sidebar { width: 0; padding: 0; overflow: hidden; border: none; }
+  .collapse-btn { position: fixed; top: 68px; left: 244px; z-index: 200; width: 22px; height: 22px; background: var(--surface); border: 1px solid var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 11px; color: var(--text2); transition: left 0.2s, transform 0.2s; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+  .layout.collapsed ~ .collapse-btn, .collapsed-btn-outer.collapsed { left: 8px; }
+  .collapse-btn:hover { background: var(--green-light); color: var(--green-dark); border-color: var(--green); }
+  .sidebar { transition: width 0.2s, padding 0.2s; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">Jaguen <span>Playbook de Captación</span></div>
+  <div class="hbadge hbadge-v">v7</div>
+  <div class="hbadge hbadge-count" id="totalBadge">— etapas</div>
+</div>
+
+<div class="layout" id="layout">
+  <button class="collapse-btn" id="collapseBtn" onclick="toggleSidebar()" title="Colapsar sidebar">◀</button>
+  <div class="sidebar">
+    <div class="sl">Ver todo</div>
+    <button class="pbtn active" onclick="filterPhase('all',this)"><span class="pdot d-all"></span> Todas las etapas <span class="pcnt" id="cnt-all"></span></button>
+    <div class="sl">Por fase</div>
+    <button class="pbtn" onclick="filterPhase('leads',this)"><span class="pdot d-lead"></span> Leads <span class="pcnt" id="cnt-leads"></span></button>
+    <button class="pbtn" onclick="filterPhase('prospeccion',this)"><span class="pdot d-prospeccion"></span> Prospección <span class="pcnt" id="cnt-prospeccion"></span></button>
+    <button class="pbtn" onclick="filterPhase('seguimiento',this)"><span class="pdot d-seguimiento"></span> Seguimiento <span class="pcnt" id="cnt-seguimiento"></span></button>
+    <div class="sl">Javier Toma las Riendas</div>
+    <button class="pbtn" onclick="filterPhase('salespitch',this)"><span class="pdot d-salespitch"></span> Sales Pitch <span class="pcnt" id="cnt-salespitch"></span></button>
+    <button class="pbtn" onclick="filterPhase('demopitch',this)"><span class="pdot d-demopitch"></span> Demo Pitch <span class="pcnt" id="cnt-demopitch"></span></button>
+    <button class="pbtn" onclick="filterPhase('cotizado',this)"><span class="pdot d-cotizado"></span> Cotizado <span class="pcnt" id="cnt-cotizado"></span></button>
+    <button class="pbtn" onclick="filterPhase('milestone1',this)"><span class="pdot d-salespitch"></span> Explicamos Jaguen <span class="pcnt" id="cnt-milestone1"></span></button>
+    <button class="pbtn" onclick="filterPhase('registrado',this)"><span class="pdot d-registrado"></span> Registrado Sin Compras <span class="pcnt" id="cnt-registrado"></span></button>
+    <button class="pbtn" onclick="filterPhase('yacompro',this)"><span class="pdot d-yacompro"></span> Ya Compró <span class="pcnt" id="cnt-yacompro"></span></button>
+    <button class="pbtn" onclick="filterPhase('cliente',this)"><span class="pdot d-cliente"></span> Cliente <span class="pcnt" id="cnt-cliente"></span></button>
+  </div>
+
+  <div class="main">
+    <div class="main-header">
+      <h1>Plan de captación de clientes</h1>
+      <p>Correos con psicología de ventas + scripts de llamada por etapa</p>
+      <div class="scnt" id="stepsCount"></div>
+    </div>
+
+    <div class="step-list" id="stepList"></div>
+  </div>
+</div>
+
+<script>
+const phaseLabels = {
+  leads:         { label:'Leads',                        sub:'Primera llamada · Script interactivo · Javier' },
+  prospeccion:   { label:'Prospección',                  sub:'Días 1–33 · Correos de Javier' },
+  seguimiento:   { label:'Seguimiento',                  sub:'Días 55–120+ · Ciclo cada 30 días' },
+  salespitch:    { label:'Sales Pitch — Javier',       sub:'Visita presencial o llamada · Diagnóstico integrado · 10–20 min' },
+  demopitch:     { label:'Demo Pitch — Javier',        sub:'jaguen.com en vivo · Ownership + Micro-cierre · 3–7 min' },
+  cotizado:      { label:'Cotizado',                   sub:'Después de enviar cotización' },
+  milestone1:    { label:'Explicamos Jaguen',         sub:'Comprador al teléfono · Primera conversación real' },
+  registrado:    { label:'Registrado Sin Compras',     sub:'Desde el alta en jaguen.com hasta la 1ª compra' },
+  yacompro:      { label:'Ya Compró',                  sub:'Activar 2ª y 3ª compra — meta: llegar a 3 compras' },
+  cliente:       { label:'Cliente',                    sub:'3+ compras — plan Odoo (3 correos + 3 llamadas por ciclo)' },
+};
+
+const steps = [
+
+  // ── SALES PITCH — JAVIER ─────────────────────────────────────────────
+  {id:200,phase:'salespitch',day:'Visita / Llamada',n:'SP1',status:'new',
+   title:'Sales Pitch — Script Completo con Diagnóstico Integrado',tags:['call','action'],
+   psych:['Confianza','Diagnóstico suave','Reducción de resistencia','Clasificación CRM'],
+   subject:null,email:null,emailNote:null,
+   isInteractivePitch: true,
+   odooNote:'Se activa cuando el comprador acepta recibir a Javier (presencial o llamada). Duración ideal: 10–20 min. Al terminar registrar en Odoo: dolor, apertura, madurez digital, rol y siguiente paso.',
+   script:null},
+
+  {id:202,phase:'salespitch',day:'Durante / Post',n:'SP2',status:'new',
+   title:'Objeciones — Respuestas Exactas',tags:['call','action'],
+   psych:['Manejo sin defensiva','Reposicionamiento','Momentum'],
+   subject:null,email:null,emailNote:null,
+   odooNote:'Si el comprador da una objeción en cualquier momento del pitch, usa estas respuestas. El objetivo nunca es presionar — es mantener el momentum.',
+   script:[
+     {tag:'Ya tenemos proveedor',text:'"Perfecto. La mayoría de nuestros clientes también tenía proveedor cuando los conocimos.\n\nNosotros no buscamos que cambien todo. Solo compáranos en algún pedido pequeño y tú decides."',note:'Corto. Sin defensiva. Sin pelear precio.'},
+     {tag:'Déjame pensarlo / Te aviso',text:'"Claro, no hay prisa. ¿Te parece si te mando el correo hoy y ya tú lo ves con calma? Así tienes todo a la mano cuando lo necesites."',note:'Nunca preguntes "¿cuándo te llamo?" — eso te pone en posición de perseguidor.'},
+     {tag:'No tengo tiempo ahora',text:'"Perfecto, no te quito más tiempo. ¿Me compartes tu correo y te mando todo para que lo veas cuando puedas?"',note:'Retírate antes de que te pidan que te retires. Eso proyecta seguridad.'},
+     {tag:'¿Cuánto más baratos son?',text:'"Honestamente depende del producto — en algunos somos más competitivos, en otros estamos parejos.\n\nPero lo que sí te puedo decir es que muchos nos eligieron no por precio, sino porque dejaron de perder tiempo persiguiendo pedidos y facturas.\n\n¿Qué productos compran más seguido? Te hago una cotización específica."',note:'Nunca defiendas el precio. Reposiciona hacia valor, tiempo y fricción operacional.'}
+   ]},
+
+  // ── DEMO PITCH — JAVIER ──────────────────────────────────────────────
+  {id:210,phase:'demopitch',day:'Milestone',n:'DP1',status:'new',
+   title:'Demo Pitch — jaguen.com en vivo · Ownership + Cierre',tags:['action'],
+   psych:['Psicología de propiedad','Reducción de fricción','Micro-compromiso'],
+   subject:null,email:null,emailNote:null,
+   odooNote:'Demo de jaguen.com en vivo — presencial con laptop/tablet o por pantalla compartida. Tener cuenta demo preparada con productos cargados. Duración ideal: 3–7 min. Al terminar: registrar correo del comprador en Odoo y crear actividad de follow-up para el día siguiente.',
+   script:[
+     {tag:'🎯 OBJETIVO',text:'Reducir fricción y miedo. Crear ownership sobre la herramienta. Mover a registro o primera cotización.',note:'KPI: correo confirmado, registro, o pedido de prueba.'},
+     {tag:'FASE 1 — Quitar presión',text:'"Ahora sí, te enseño rápido.\n\nAlgo importante antes de empezar: la página es herramienta, no obligación.\n\nHay clientes que aman usarla y hay clientes que nunca la usan y nos marcan directo. Las dos maneras funcionan perfectamente.\n\nLa idea es adaptarnos a cómo tú trabajas, no obligarte a cambiar."',note:'Quitar la presión de "tienes que aprender algo nuevo" antes de mostrar cualquier cosa.'},
+     {tag:'FASE 2 — Velocidad',text:'"La idea principal aquí es velocidad.\n\nSi buscas cualquier producto aquí arriba, te lo busca en todas las líneas al instante.\n\nPero honestamente lo más útil no es eso."',note:'→ Mostrar el buscador rápido, luego transición a favoritos'},
+     {tag:'PARTICIPACIÓN ACTIVA — CRÍTICO',text:'"Oye, busca tú cualquier producto que compres seguido — el que quieras."',note:'⚡ Cuando él toca la pantalla, ya no es tu herramienta — es su herramienta. Psicología de propiedad. Este momento es el más importante del demo.'},
+     {tag:'FASE 3 — Favoritos',text:'"Es esta parte.\n\nTú puedes guardar los productos que normalmente compran.\n\nEntonces en vez de estar buscando producto por producto cada vez… simplemente entras aquí, agregas al carrito y listo.\n\nEso le ahorra muchísimo tiempo a compras."',note:'Si en el diagnóstico mencionó productos recurrentes → referenciarlos aquí.'},
+     {tag:'FASE 4 — Centralización',text:'"Otra cosa importante: todo queda centralizado aquí.\n\nCotizaciones, pedidos, facturas, XML, historial — todo.\n\nEntonces no tienes que andar buscando correos viejos o persiguiendo información.\n\nY cuando entras con tu cuenta ya ves tus precios especiales directamente."',note:'Si en el diagnóstico mencionó que persigue facturas o correos → mencionar ese dolor específico aquí.'},
+     {tag:'FASE 5 — Flexibilidad',text:'"Y algo importante: la página es herramienta, no obligación.\n\nSi prefieres marcarme, mandarme WhatsApp o correo, también funciona perfecto.\n\nLa idea es adaptarnos a cómo tú trabajas."',note:'Si en diagnóstico marcó "tradicional" → enfatizar esta parte más. Si marcó "digital" → pasar rápido.'},
+     {tag:'MICRO-CIERRE — UN SOLO CTA',text:'"Al final la idea es muy sencilla: hacer todo más rápido, más fácil y sin errores."\n\n(PAUSA)\n\n"¿Me compartes tu correo o te llega mejor al que ya tienes registrado?"',note:'⏸ PAUSA — el primero que habla después de esto pierde. Cierra la boca.\n\nNunca des dos CTAs al mismo tiempo. Una sola pregunta, la más fácil primero.'},
+     {tag:'Una vez que confirma el correo',text:'"Perfecto. Hoy mismo te mando el link de registro y también algunos productos de los que me comentaste para que tengas los precios de referencia.\n\nAsí tienes todo listo para cuando quieras probarnos con parte de un pedido."',note:'Esto crea: micro-compromiso + razón para follow-up mañana + pelota en movimiento.'}
+   ]},
+
+  {id:211,phase:'demopitch',day:'Día siguiente',n:'DP2',status:'new',
+   title:'Follow-up Post Demo — Consolidar momentum',tags:['email'],
+   psych:['Consolidación post-reunión','Bajo compromiso','Momentum'],
+   subject:'Acceso a Jaguen + precios que me pediste',
+   email:`Que tal [Nombre], buenos días.
+
+Gracias por el tiempo de ayer.
+
+Te dejo aquí el acceso a la plataforma para que la explores con calma: jaguen.com
+
+Como comentamos, la idea es facilitarte compras y reducir el seguimiento que a veces toca darle a los proveedores.
+
+Si gustas, en tu próximo pedido podemos probar con algunos productos y comparas servicio, tiempos y atención — sin ningún compromiso de cambiar todo.
+
+Te adjunto también los precios de [productos mencionados] para que tengas referencia.
+
+Quedo al pendiente.
+
+Javier — Jaguen — [teléfono]`,
+   emailNote:'Este correo es CRÍTICO. El cerebro necesita consolidación post-reunión. Mandarlo el mismo día o a más tardar a la mañana siguiente. Sin este correo, el momentum de la visita se pierde.',
+   script:null},
+
+  // ── LEADS — SCRIPT INTERACTIVO DE LLAMADAS ────────────────────────
+  {id:300,phase:'leads',day:'Primera llamada',n:'LL1',status:'new',
+   title:'Script de Llamada — Bloques Interactivos',tags:['call','action'],
+   psych:['Rapport','Diagnóstico','Cierre natural'],
+   subject:null,email:null,emailNote:null,
+   isInteractiveCall: true,
+   odooNote:'Después de cada llamada actualiza en Odoo: Tipo Interacción, Nombre Secretaria, Nombre Comprador, Correo, Interés Cotización, Método Cotización, Resumen Llamadas, Intentos.',
+   script:null},
+
+];// placeholder — real steps appended below
+
+const stepsOriginal = [
+  {id:1,phase:'prospeccion',day:'Día 1',n:'01',status:'updated',
+   title:'Llamada + Correo #1 — Primera presentación',tags:['email','call'],
+   psych:['Primera impresión','Prueba social','Reciprocidad','Beneficio concreto'],
+   subject:'Ahorro de hasta 11% en insumos de oficina — Jaguen, Hermosillo',
+   email:`<div data-oe-version="1.2">Que tal&nbsp;<t t-if="object.x_studio_persona_compras_crm and object.x_studio_persona_compras_crm != 'No obtenido'"><t t-out="object.x_studio_persona_compras_crm"></t></t><t t-else="">Estimados</t>, buen día,&nbsp;</div><div><br/></div><div><t t-if="object.x_studio_tipo_interaccion == 'Comprador'">
+<div>Me doy el gusto de escribirte este breve correo. Te agradezco haber tomado la llamada y regalarme unos minutitos para platicarte un poco de nosotros.<br/><br/></div>
+</t><t t-else="">
+<t t-if="object.x_studio_secretaria_crm and object.x_studio_secretaria_crm != 'No obtenido'">
+<t t-if="object.x_studio_persona_compras_crm and object.x_studio_persona_compras_crm != 'No obtenido'">
+<div>Marqué a <t t-out="object.partner_name"></t> y me atendió <t t-out="object.x_studio_secretaria_crm"></t> quien me compartió tu correo para presentarte Jaguen.<br/><br/></div>
+</t><t t-else=""><div>Marqué a <t t-out="object.partner_name"></t> y me atendió <t t-out="object.x_studio_secretaria_crm"></t> quien me compartió este correo para presentarles Jaguen.<br/><br/></div>
+</t></t><t t-else="">
+<t t-if="object.x_studio_persona_compras_crm and object.x_studio_persona_compras_crm != 'No obtenido'">
+<div>Marqué a <t t-out="object.partner_name"></t> y me proporcionaron este correo de contacto para presentarte Jaguen.<br/><br/></div>
+</t><t t-else=""><div>Marqué a <t t-out="object.partner_name"></t> y me proporcionaron este correo de contacto para presentarles Jaguen.<br/><br/></div>
+</t></t></t><t t-if="object.x_studio_tipo_interaccion != 'Comprador'">
+<div>Somos distribuidores directos de fábrica aquí en Hermosillo — papelería, limpieza institucional, cómputo, cafetería y más.</div><div><br/></div>
+</t></div><div>Lo que más valoran nuestros clientes:&nbsp;</div><div>→ Entrega al día siguiente&nbsp;</div><div>→ Pedidos completos al 100% (sin faltantes)&nbsp;</div><div>→ Atención directa a tu cuenta&nbsp;</div><div>→ Catálogo, cotizaciones y pedidos en línea en jaguen.com&nbsp;</div><div><br/></div><div>La mayoría de las empresas con las que trabajamos llegó porque su proveedor anterior fallaba en surtido o atención. En promedio ahorran entre 6 y 11% en las líneas que manejamos.&nbsp;</div><div>Si no podemos mejorar lo que ya tienes, te lo digo de frente — sin presión.&nbsp;</div><div><br/></div><div>¿Tienes 5 minutos esta semana para que te cuente cómo lo hacemos?<br/><br/>Saludos que estes bien!</div>`,
+   emailNote:'5 escenarios según tipo interacción y datos capturados.'},
+
+  {id:2,phase:'prospeccion',day:'Día 4',n:'02',status:'',
+   title:'Llamada + Correo #2 — Seguimiento con gancho',tags:['email','call'],
+   psych:['Curiosidad','Bajo compromiso','Escasez implícita'],
+   subject:'RE: Insumos Jaguen — ¿le cotizo 10 productos?',
+   email:`Que tal [Nombre], buenos días,
+
+Seguimiento a mi correo del otro día — soy Javier de Jaguen.
+
+quedamos en que cuando marcó a [Empresa] mencionaste / la secretaria mencionó que manejan [categoría si se consiguió, si no: "varios tipos de suministros"]. Con eso en mente, quiero ser concreto:
+
+Solo le pido una cosa: déjeme cotizarle los 10 o 15 productos que más consume su empresa.
+
+Si el precio o servicio no mejora lo que ya tiene, no hay de qué hablar. Pero si hay oportunidad, valdría la pena verlo en 10 minutos.
+
+¿Me comparte una lista rápida o me dice qué categorías manejan más (papelería, limpieza, cómputo)?
+
+Javier — Jaguen — [teléfono]`,
+   emailNote:'La continuidad de contacto previo — el prospecto siente que ya hay contexto y que no es un correo masivo genérico.',
+   isInteractiveFollowUp:true},
+
+  {id:3,phase:'prospeccion',day:'Día 8',n:'03',status:'',
+   title:'Correo #3 — Pregunta de dolor',tags:['email'],
+   psych:['Identificación de dolor','Empatía','Curiosidad'],
+   subject:'Pregunta rápida — ¿han tenido faltantes últimamente?',
+   email:`Que tal [Nombre], buenos días,
+
+Pregunta directa: ¿han tenido problemas recientes con faltantes, entregas tardías o mala atención de su proveedor actual?
+
+Si es así, puede valer la pena comparar en 10 minutos.
+
+Si no, igual le agradezco me lo confirme — así sé si tiene sentido seguir en contacto.
+
+[Nombre] — Jaguen — [teléfono]`,
+   emailNote:null,script:null},
+
+  {id:4,phase:'prospeccion',day:'Día 11',n:'04',status:'new',
+   title:'Correo #3A — Favoritos en jaguen.com',tags:['email'],
+   psych:['Utilidad práctica','Facilidad de recompra','Sin presión'],
+   subject:'algo que le puede servir — jaguen.com',
+   email:`Hola [Nombre],
+
+Te escribo rápido para darte seguimiento.
+
+Algo que le ha servido mucho a nuestros clientes que compran insumos cada mes: en jaguen.com puedes guardar tus productos habituales como favoritos — la próxima vez que necesites hacer un pedido, están ahí listos, sin tener que buscarlos de nuevo.
+
+Si quieres probarlo, regístrate en jaguen.com, arma un carrito con lo que ya compras normalmente y con eso te preparo una cotización comparativa para que tengas un punto de referencia real.
+
+Sin compromiso.
+
+Javier
+JAGUEN — jaguen.com | Hermosillo, Sonora`,
+   emailNote:'Correo corto enfocado en la funcionalidad de favoritos — útil para clientes que compran insumos recurrentes.',
+   script:null},
+
+  {id:5,phase:'prospeccion',day:'Día 15',n:'05',status:'',
+   title:'Llamada + Correo #4 — Cierre de silencio',tags:['email','call'],
+   psych:['Reciprocidad mínima','Tono directo','Cierre de bucle'],
+   subject:'RE: ¿Sí o no? — Jaguen',
+   email:`Que tal [Nombre],
+
+Solo necesito un sí o un no para saber si tiene sentido seguir en contacto.
+
+¿Le interesa comparar precios y servicio con lo que tiene hoy?
+
+Sin compromiso, sin presión. Solo para no quitarle tiempo si no es el momento.
+
+[Nombre] — Jaguen — [teléfono]`,
+   emailNote:null,
+   isInteractiveFollowUp:true},
+
+  {id:6,phase:'prospeccion',day:'Día 18',n:'06',status:'',
+   title:'Visita presencial — Drop-In',tags:['action'],
+   psych:['Principio de compromiso','Presencia física','Reciprocidad'],
+   subject:null,email:null,emailNote:null,
+   odooNote:'Visita física a la empresa. Sin agenda previa. Lleva material de Jaguen.',
+   script:[
+     {tag:'Objetivo',text:'Presentarte en persona. Dejar material. Ver si puedes hablar con el comprador.',note:'No vayas a vender. Ve a conocer. La venta viene sola.'},
+     {tag:'Con quien sea',text:'"Buenos días, soy Javier de Jaguen — somos distribuidores de insumos de oficina aquí en Hermosillo. ¿Estará [Nombre Comprador]?"',note:'Si no está: deja material y tu tarjeta. Pide que le digan que pasaste.'},
+     {tag:'Si te reciben',text:'"Vengo a presentarme en persona — te he estado escribiendo y quería conocerte. No te quito más de 3 minutos."'},
+     {tag:'Material',text:'Deja catálogo, tarjeta y muestra si tienes. El objetivo es que te recuerden cuando les llegue el correo.'}
+   ]},
+
+  {id:7,phase:'prospeccion',day:'Día 22',n:'07',status:'',
+   title:'Llamada post Drop-In',tags:['call'],
+   psych:['Seguimiento de compromiso','Continuidad'],
+   subject:null,email:null,emailNote:null,
+   odooNote:'Llamada de seguimiento específica a la visita. Mencionar que pasaste en persona.',
+   script:[
+     {tag:'Apertura',text:'"Que tal [Nombre], habla Javier de Jaguen — pasé la semana pasada a dejarte material. ¿Te llegó?"',note:'Si no estaba: "Dejé algo con tu equipo, ¿te avisaron?"'},
+     {tag:'Transición',text:'"Quería aprovechar para preguntarte — ¿tuviste oportunidad de revisarlo? Es solo para saber si tiene sentido o no."'},
+     {tag:'Si hay interés',text:'"Perfecto — ¿tienes 5 minutos para que te platique rapidísimo cómo podríamos ayudarlos?"'},
+     {tag:'Si no hay tiempo',text:'"Sin problema, ¿a qué correo te mando una comparativa para que lo revises cuando puedas?"'}
+   ]},
+
+  {id:8,phase:'prospeccion',day:'Día 25',n:'08',status:'updated',
+   title:'Correo #5 — Ruptura de patrón',tags:['email'],
+   psych:['Pérdida potencial','Opciones múltiples','Autonomía del prospecto'],
+   subject:'¿lo cierro?',
+   email:`Que tal [Nombre],
+
+He intentado contactarte un par de veces sin éxito.
+
+No sé si:
+
+A) no es prioridad ahorita
+B) ya tienen buen proveedor y no hace falta comparar
+C) o simplemente no es el momento
+
+Si quieres, lo dejamos aquí por ahora — sin problema.
+
+Solo dime.
+
+[Nombre] — Jaguen — [teléfono]`,
+   emailNote:'Formato ABC: las opciones reducen la ansiedad de decir "no" y suelen disparar respuestas porque facilitan una salida honesta.',
+   script:null},
+
+  {id:9,phase:'prospeccion',day:'Día 33',n:'09',status:'updated',
+   title:'Correo #6 — Cierre definitivo (por ahora)',tags:['email'],
+   psych:['Pérdida de acceso','Puerta abierta','Sin presión'],
+   subject:'cierro esto por ahora',
+   email:`Que tal [Nombre],
+
+No logré coincidir contigo, así que cierro esto de mi lado por el momento.
+
+Si más adelante necesitas mejorar precios o evitar faltantes, con gusto lo vemos.
+
+Quedo al pendiente.
+
+[Nombre] — Jaguen — [teléfono]`,
+   emailNote:null,script:null},
+
+  {id:10,phase:'seguimiento',day:'Día 55',n:'10',status:'',
+   title:'Llamada + Correo — Reactivación #1',tags:['email','call'],
+   psych:['Novedad','Prueba social reciente','Sin presión'],
+   subject:'Retomo contacto — Jaguen',
+   email:`Que tal [Nombre], buenos días,
+
+Hace algunas semanas intenté contactarle. Retomo porque hemos empezado a trabajar con algunas empresas de la zona y quería ver si actualmente les interesaría revisar precios o tiempos de entrega en sus suministros.
+
+No sé si sea prioridad ahorita, pero si en algún momento quieren comparar, con gusto lo vemos en 10 minutos.
+
+[Nombre] — Jaguen — [teléfono]`,
+   emailNote:null,
+   isInteractiveFollowUp:true},
+
+  {id:11,phase:'seguimiento',day:'Día 57',n:'11',status:'new',
+   title:'Llamada — Seguimiento Reactivación',tags:['call'],
+   psych:['Persistencia calibrada','Tono directo','Bajo compromiso'],
+   subject:null,email:null,emailNote:null,
+   isInteractiveFollowUp:true},
+
+  {id:12,phase:'seguimiento',day:'Día 62',n:'12',status:'',
+   title:'Correo — Reactivación #2',tags:['email'],
+   psych:['Tono liviano','Puerta abierta'],
+   subject:'Lo dejo por ahora — pero aquí estamos',
+   email:`Que tal [Nombre],
+
+Entiendo que puede no ser el momento.
+
+Lo dejo por aquí, pero si en algún momento quieren comparar precios o mejorar el servicio, con gusto lo revisamos.
+
+[Nombre] — Jaguen — [teléfono]`,
+   emailNote:null,script:null},
+
+  {id:13,phase:'seguimiento',day:'Día 90',n:'13',status:'',
+   title:'Llamada + Correo — Reactivación #3',tags:['email','call'],
+   psych:['Timing de dolor','Empatía','Baja fricción'],
+   subject:'Consulta rápida — ¿todo bien con su proveedor?',
+   email:`Que tal [Nombre], buenos días,
+
+Retomo contacto porque en este punto muchas empresas ya llevan meses con el mismo proveedor y a veces empiezan a notar pequeños detalles — faltantes, tiempos, atención — que no habían priorizado.
+
+Si ese es su caso, con gusto revisamos en 10 minutos si podemos mejorarle algo.
+
+Si no, sin problema.
+
+[Nombre] — Jaguen — [teléfono]`,
+   emailNote:null,
+   isInteractiveFollowUp:true},
+
+  {id:14,phase:'seguimiento',day:'Día 120',n:'14',status:'new',
+   title:'Llamada + Correo — Reactivación Día 120',tags:['email','call'],
+   psych:['Presencia constante','Top of mind','Timing de cambio'],
+   subject:'Sigo al pendiente — Jaguen',
+   email:`Que tal [Nombre], buenos días,
+
+Solo para mantenerme en contacto — si en algún momento surge la necesidad de mejorar servicio, tiempos de entrega o precios, con gusto puedo ayudarle.
+
+Quedo a la orden.
+
+[Nombre] — Jaguen — [teléfono]`,
+   emailNote:null,
+   isInteractiveFollowUp:true},
+
+  {id:15,phase:'seguimiento',day:'Cada 30 días',n:'15',status:'new',
+   title:'Llamada + Correo — Seguimiento cada 30 días',tags:['call','email'],
+   psych:['Timing','Baja presión','Presencia constante'],
+   subject:'Seguimiento — Jaguen',
+   email:`Que tal [Nombre] buenos días,
+
+Paso rápido por aquí para no perder contacto.
+
+Si en algún momento necesitas una segunda opción para tus insumos de oficina, limpieza o cafetería, aquí estamos — entrega al día siguiente y pedidos completos.
+
+Saludos que estés bien!
+
+Javier
+JAGUEN — jaguen.com | Hermosillo, Sonora`,
+   emailNote:'Correo de presencia — ciclo cada 30 días.',
+   isInteractiveFollowUp:true},
+
+  {id:33,phase:'seguimiento',day:'Cada 30 días 2',n:'16',status:'new',
+   title:'Llamada + Correo — Seguimiento cada 30 días 2',tags:['call','email'],
+   psych:['Curiosidad','Bajo esfuerzo','Favoritos'],
+   subject:'Comparación sin compromiso',
+   email:`Que tal [Nombre] buenos días,
+
+Sigo al pendiente por aquí.
+
+Varios clientes terminan usando la opción en www.jaguen.com de guardar sus productos recurrentes en favoritos para no rehacer pedidos cada vez — les ahorra bastante tiempo en compras de cada mes. Si en algún punto quieres revisar precios de los productos que ya compras, con que armes un carrito te preparo una comparación rápida para que tengas referencia.
+
+Sin compromiso.
+
+Saludos que estés bien!`,
+   emailNote:'Ángulo: curiosidad + bajo esfuerzo. Referencia favoritos de jaguen.com.',
+   isInteractiveFollowUp:true},
+
+  {id:34,phase:'seguimiento',day:'Cada 30 días 3',n:'17',status:'new',
+   title:'Llamada + Correo — Seguimiento cada 30 días 3',tags:['call','email'],
+   psych:['Dolor silencioso','Identificación','Respaldo'],
+   subject:'Sobre pedidos incompletos',
+   email:`Que tal [Nombre] buenos días,
+
+Paso rápido por aquí para no perder contacto.
+
+Si en algún momento necesitas una segunda opción para tus insumos, con gusto te puedo apoyar. Una duda rápida — ¿alguna vez te ha pasado que un pedido llega incompleto o fuera de tiempo?
+
+Es justo en esos casos donde normalmente entramos a apoyar.
+
+Si en algún momento necesitas respaldo, aquí estoy.
+
+Saludos que estés bien!`,
+   emailNote:'Ángulo: dolor silencioso + identificación. Activa memoria de problemas con proveedor actual.',
+   isInteractiveFollowUp:true},
+
+  {id:16,phase:'cotizado',day:'Día 2 post-cotización',n:'18',status:'updated',
+   title:'Seguimiento a Cotización #1',tags:['email','call'],
+   psych:['Apertura de conversación real','Facilitar decisión','Eliminar fricción'],
+   subject:'sobre la cotización',
+   email:`Que tal [Nombre], buenos días,
+
+¿pudiste revisarla?
+
+Te hago dos preguntas rápidas:
+
+¿Hay algo que sí te hizo sentido?
+¿Hay algo que no te cuadró?
+
+Con eso puedo ajustarla rápido.
+
+[Nombre] — Jaguen — [teléfono]`,
+   emailNote:'Las dos preguntas abren conversación real en lugar de un sí/no — permiten identificar objeciones concretas y ajustar.',
+   script:[
+     {tag:'Apertura',text:'"Que tal [Nombre], Javier de Jaguen. Te mandé cotización el [día] — ¿tuviste oportunidad de verla?"'},
+     {tag:'Si la vio',text:'"¿Hay algo que sí te hizo sentido? ¿Y algo que no te cuadró?" (espera respuesta antes de continuar)'},
+     {tag:'Si no la vio',text:'"Sin problema — ¿cuándo crees que puedas revisarla? Te puedo marcar en [día] para que la veamos juntos."'},
+     {tag:'Objeción de precio',text:'"Si ves algún producto donde el precio no te convence, dime — podemos ajustar en volumen o hacer una combinación que te funcione."'},
+     {tag:'Cierre',text:'"¿Qué necesitarías para que pudiéramos arrancar con un primer pedido esta semana?"'}
+   ]},
+
+  {id:27,phase:'cotizado',day:'Día 7 post-cotización',n:'19',status:'new',
+   title:'Seguimiento a Cotización #2 — Correo',tags:['email'],
+   psych:['Apertura de objeción','Empatía','Facilitar respuesta'],
+   subject:'una pregunta sobre la cotización',
+   email:`Que tal [Nombre],
+
+Quería preguntarte algo directo: ¿hubo algo en la cotización que no te hizo sentido — algún precio, producto o condición?
+
+A veces hay detalles que se pueden ajustar y no lo menciono si no me preguntas.
+
+Dime y lo resolvemos rápido.
+
+[Nombre] — Jaguen — [teléfono]`,
+   emailNote:'+5 días del Seguimiento #1. Solo correo — el objetivo es abrir la puerta a objeciones concretas antes de hacer otra llamada.',
+   script:null},
+
+  {id:28,phase:'cotizado',day:'Día 12 post-cotización',n:'20',status:'new',
+   title:'Seguimiento a Cotización #3 — Correo',tags:['email'],
+   psych:['Ruptura de patrón','Puerta de salida','Sin presión'],
+   subject:'¿seguimos con esto?',
+   email:`Que tal [Nombre],
+
+He intentado dar seguimiento a la cotización un par de veces.
+
+Entiendo que puede haber muchas cosas encima — no hay problema.
+
+Si la cotización ya no es relevante o decidieron quedarse con su proveedor actual, solo dímelo y lo cierro de mi lado.
+
+Si todavía tiene sentido revisarla, aquí estoy.
+
+[Nombre] — Jaguen — [teléfono]`,
+   emailNote:'+10 días del Seguimiento #1. Correo de ruptura — le da salida fácil al prospecto. Si responde, es una señal de interés real.',
+   script:null},
+
+  {id:29,phase:'cotizado',day:'Día 22 post-cotización',n:'21',status:'new',
+   title:'Seguimiento a Cotización #4 — Llamada + Correo',tags:['email','call'],
+   psych:['Cierre elegante','Pérdida de acceso','Puerta abierta'],
+   subject:'cierro la cotización por ahora',
+   email:`Que tal [Nombre],
+
+No logré coincidir contigo para darle seguimiento a la cotización, así que la cierro de mi lado por el momento.
+
+Si más adelante quieren retomar — sea para comparar precios o probar el servicio — con gusto la actualizamos.
+
+Quedo al pendiente.
+
+[Nombre] — Jaguen — [teléfono]`,
+   emailNote:'+20 días del Seguimiento #1. Después de este punto: si no hay respuesta, la oportunidad regresa a fase Seguimiento y entra al ciclo de reactivación cada 35 días.',
+   script:[
+     {tag:'Apertura',text:'"Que tal [Nombre], Javier de Jaguen. Le marco porque no pude darle seguimiento a la cotización y quería cerrar el ciclo — ¿sigue siendo de interés o lo dejamos para después?"'},
+     {tag:'Si dice que después',text:'"Perfecto. ¿En cuánto tiempo aproximadamente? Para marcarle en ese momento."'},
+     {tag:'Si dice que no',text:'"Sin problema, le agradezco su tiempo. Si en algún momento cambia algo con su proveedor, aquí estamos."'},
+     {tag:'Si dice que sí quiere avanzar',text:'"Excelente — entonces lo que necesito es que se registre en jaguen.com para activar su cuenta y arrancar. ¿Lo hace hoy o mañana?"'},
+     {tag:'Sin respuesta después de este punto',text:'Regresar oportunidad a fase Seguimiento. Entra al ciclo de reactivación cada 35 días.',note:'Este es el último touchpoint del ciclo de cotización.'}
+   ]},
+
+  {id:26,phase:'milestone1',day:'Milestone',n:'M1',status:'new',
+   title:'Explicamos Jaguen — Comprador al teléfono',tags:['call'],
+   psych:['Primera conversación real','Confianza','Presentación personalizada'],
+   subject:null,email:null,emailNote:null,
+   odooNote:'JAVIER TOMA LAS RIENDAS aquí. Esta es la primera conversación real entre Javier y el comprador — dura ~15–20 minutos. No es un pitch rápido, es una presentación completa de Jaguen: quiénes somos, cómo trabajamos, qué nos diferencia, casos de éxito. Seguimiento ya sembró el terreno — Javier cierra con cotización.',
+   script:[
+     {tag:'Confirmación de rol',text:'"Perfecto — ¿usted es quien maneja las compras de insumos o hay alguien más involucrado en esa decisión?"',note:'Antes de presentar nada, confirma que estás con la persona correcta.'},
+     {tag:'Intro breve',text:'"Somos Jaguen — distribuidores directos de fábrica aquí en Hermosillo. Manejamos papelería, limpieza, cómputo y cafetería."'},
+     {tag:'Diferenciadores clave',text:'"Lo que más nos pide la gente es esto: entrega al día siguiente, pedidos completos al 100% sin faltantes, y atención directa a su cuenta. También tienen catálogo y pueden hacer pedidos en línea en jaguen.com."'},
+     {tag:'Prueba social',text:'"La mayoría de las empresas con las que trabajamos nos buscó cuando su proveedor empezó a fallarles en surtido o tiempos. En promedio encontramos mejoras de entre 6 y 11%."'},
+     {tag:'Sin presión',text:'"Si no podemos mejorar lo que ya tienen, se los digo de frente — no tiene caso cambiar por cambiar."'},
+     {tag:'Siguiente paso concreto',text:'"Lo que me gustaría hacer es cotizarles 10 o 15 de los productos que más consumen para que tengan un punto de comparación real. ¿Me pueden compartir esa lista o me dicen las categorías principales?"'},
+     {tag:'Cierre',text:'"¿Le mando la cotización a este correo o a uno diferente?"'}
+   ]},
+
+  {id:22,phase:'registrado',day:'Día 1 — Alta en página',n:'22',status:'new',
+   title:'Bienvenida — se registra en jaguen.com',tags:['action'],
+   psych:['Reciprocidad','Onboarding','Primera impresión de servicio'],
+   subject:null,email:null,emailNote:null,
+   odooNote:'Cliente se registró en jaguen.com. Dar de alta manualmente en Odoo si no se hizo automáticamente. Confirmar que recibió correo de bienvenida con acceso.'},
+
+  {id:17,phase:'registrado',day:'Día 5 — +4 días',n:'23',status:'updated',
+   title:'Ask for First Purchase — Llamada + Correo',tags:['email','call'],
+   timing:'+4 días del punto 19 (Bienvenida).',
+   psych:['Micro-compromiso','Máxima facilitación','Reducir esfuerzo'],
+   subject:'primer pedido',
+   email:`Que tal [Nombre],
+
+La mayoría de clientes empieza con un pedido pequeño para probar.
+
+Si quieres, puedo armarte uno base en 2–3 minutos con lo que normalmente usan empresas como la tuya.
+
+¿te lo preparo?
+
+[Nombre] — Jaguen — [teléfono]`,
+   emailNote:'La pregunta "¿te lo preparo?" es el micro-compromiso más fácil de decir que sí. Reduce la fricción al máximo.',
+   script:[
+     {tag:'Apertura',text:'"Que tal [Nombre], solo para ver si ya revisaste la plataforma y si hay algo en qué pueda ayudarte para tu primer pedido."'},
+     {tag:'Oferta concreta',text:'"Si quieres, yo te armo un pedido sugerido en base a lo que normalmente consumen empresas como la tuya — solo lo revisas y me dices qué ajustar. ¿Te lo preparo?"'}
+   ]},
+
+  {id:18,phase:'registrado',day:'Día 12 — +7 días',n:'24',status:'new',
+   title:'Ask for First Purchase 2 — Llamada',tags:['call'],
+   timing:'+7 días del punto 20.',
+   timing:'+7 días del punto 17.',
+   psych:['Persistencia amable','Resolución de fricción','Momentum'],
+   subject:null,email:null,emailNote:null,
+   script:[
+     {tag:'Apertura',text:'"Que tal [Nombre], Javier de Jaguen. Solo para retomar — ¿tuviste oportunidad de ver la página o el pedido sugerido que te mandé?"'},
+     {tag:'Si lo vio pero no ha comprado',text:'"¿Hay algo que te haya frenado o alguna duda que no quedó clara? A veces es el proceso de la plataforma, a veces el precio — dime para poder ayudarte."'},
+     {tag:'Si no lo ha visto',text:'"Sin problema. ¿Qué sería más fácil para ti — te armo yo el pedido y tú solo lo apruebas, o prefieres revisarlo tú en la página?"'},
+     {tag:'Cierre',text:'"¿Qué necesitas de mi parte para que el primer pedido salga esta semana?"',note:'Pregunta orientada a resolver obstáculos, no a presionar.'}
+   ]},
+
+  {id:19,phase:'registrado',day:'Día 19 — +7 días',n:'25',status:'',
+   title:'Ask for First Purchase 3 — Llamada + Correo',tags:['email','call'],
+   timing:'+7 días del punto 21. Se repite cada 10 días hasta la primera compra.',
+   psych:['Sin presión','Pausa estratégica','Puerta abierta'],
+   subject:'¿Lo dejamos para después?',
+   email:`Que tal [Nombre],
+
+No hemos recibido tu primer pedido — entiendo que a veces no es el mejor momento.
+
+Cuando estés listo, aquí estamos. Normalmente sugerimos empezar con algo pequeño para que conozcas cómo trabajamos.
+
+Solo escríbeme o llámame cuando quieras.
+
+[Nombre] — Jaguen — [teléfono]`,
+   emailNote:null,
+   script:[
+     {tag:'Apertura',text:'"[Nombre], Javier de Jaguen. Quería ver si hay algo que te haya dificultado hacer el primer pedido — a veces hay dudas sobre la plataforma o los precios."'},
+     {tag:'Resolución de fricción',text:'"Si hay algo que no te quedó claro o quieres que te ayude en persona, con gusto paso a tu oficina."'},
+     {tag:'Cierre sin presión',text:'"Si no es el momento, sin problema — solo avísame cuando quieras arrancar y lo tenemos listo ese mismo día."'}
+   ]},
+
+  {id:20,phase:'yacompro',day:'Día 12 post 1ª compra',n:'26',status:'new',
+   title:'Email Follow-Up Purchase 2',tags:['email'],
+   timing:'12 días después de la 1ª compra. Loop cada 12 días hasta la 2ª compra.',
+   psych:['Momentum de primera compra','Servicio proactivo','Anticipación'],
+   subject:'Seguimiento rápido',
+   email:`Que tal [Nombre], buenos días,
+
+Solo paso a saludar — ¿hay algo que estén por reordenar próximamente?
+
+La mayoría de nuestros clientes repite en las primeras semanas con lo mismo que pidieron la primera vez. Si quieres, te armo el reorden en minutos.
+
+¿Hay algo en qué pueda apoyarte?
+
+[Nombre] — Jaguen — [teléfono]`,
+   emailNote:'Se envía entre el día 15 y 25 después de la 1ª compra. El objetivo es activar la 2ª compra mientras el cliente todavía tiene fresco el buen servicio de la primera.',
+   script:null},
+
+  {id:21,phase:'yacompro',day:'Día 15 post 2ª compra',n:'27',status:'new',
+   title:'Email Follow-Up Purchase 3',tags:['email'],
+   timing:'15 días después de la 2ª compra. Loop cada 12 días hasta la 3ª compra.',
+   psych:['Hábito en formación','Pertenencia','Anticipación de necesidad'],
+   subject:'¿Necesitan algo?',
+   email:`Que tal [Nombre], buenos días,
+
+Solo para mantenerme en contacto — si están por necesitar algún material o quieren cotizar algo, con gusto lo vemos.
+
+También puedo sugerirles una reposición basada en sus dos pedidos anteriores, para que no tengan que armarla desde cero.
+
+¿Algo en qué pueda apoyarles?
+
+[Nombre] — Jaguen — [teléfono]`,
+   emailNote:'Se envía entre el día 15 y 25 después de la 2ª compra. "Basado en sus dos pedidos anteriores" refuerza que conoces su negocio — clave para convertirlos en clientes habituales. Con la 3ª compra ya pasan a Post-venta.',
+   script:null},
+
+  {id:25,phase:'yacompro',day:'Después de 3ª compra',n:'28',status:'',
+   timing:'1 día después de la 3ª compra.',
+   title:'Solicitar reseña en Google',tags:['email','call'],
+   psych:['Reciprocidad','Identidad de cliente satisfecho','Facilitar acción'],
+   subject:'Un favor rápido — reseña en Google',
+   email:`Que tal [Nombre], buenos días,
+
+Retomo mi mensaje anterior — si han tenido buena experiencia con nosotros, ¿nos podría apoyar con una reseña rápida?
+
+Nos ayuda mucho a llegar a más empresas como la suya.
+
+Aquí el link: https://g.page/r/CS7gxerEFMB1EAE/review
+
+Le toma menos de 2 minutos. De antemano, muchas gracias.
+
+[Nombre] — Jaguen — [teléfono]`,
+   emailNote:null,
+   script:[
+     {tag:'Apertura',text:'"Que tal [Nombre], Javier de Jaguen. ¿Cómo han estado? Quería pedirle un favor personal."'},
+     {tag:'Solicitud',text:'"Si han tenido buena experiencia con nosotros — entregas, surtido, atención — ¿nos podría apoyar con una reseña rápida en Google? Tarda menos de 2 minutos."'},
+     {tag:'Si acepta',text:'"Muchas gracias, de verdad nos ayuda muchísimo. Le mando el link ahorita mismo."'},
+     {tag:'Si duda',text:'"Sin presión — si en algún momento tiene un minuto, se lo agradecería mucho."'}
+   ]},
+
+  {id:35,phase:'cliente',day:'Día 15 post-compra',n:'29',status:'',
+   title:'Correo Post-Venta 1 — ¿Reabastecemos esta semana?',tags:['email'],
+   psych:['Anticipación','Servicio proactivo','Evitar desabasto'],
+   timing:'Correo a los 15 días de la última compra. Se reinicia con cada nueva compra.',
+   subject:'¿Reabastecemos esta semana?',
+   email:`Que tal [Nombre], buenos días,
+
+Espero que todo vaya muy bien.
+
+Noté que han pasado algunos días desde su último pedido y quería ponerme a sus órdenes para lo que necesiten. Si están por reabastecer o tienen algún proyecto en puerta, con gusto puedo apoyarles para que no se queden sin stock.
+
+Si lo prefieren, puedo ayudarles a armar un pedido rápido en base a lo que normalmente consumen — así lo resolvemos en minutos.
+
+[Nombre] — Jaguen — [teléfono]`,
+   emailNote:null,
+   script:null},
+
+  {id:30,phase:'cliente',day:'Día 20 post-compra',n:'30',status:'',
+   title:'Llamada Post-Venta 1',tags:['call'],
+   psych:['Seguimiento proactivo','Servicio cercano','Anticipación'],
+   timing:'Llamada a los 20 días de la última compra. Se reinicia con cada nueva compra.',
+   subject:null,email:null,emailNote:null,
+   script:[
+     {tag:'Apertura',text:'"Que tal [Nombre], Javier de Jaguen. Han pasado algunas semanas desde su último pedido — quería ver si están por necesitar algo o si les ayudo a armar el reorden."'},
+     {tag:'Propuesta',text:'"Puedo armarles el pedido en base a lo que compraron la última vez — solo lo revisan y me dicen si cambia algo."'},
+     {tag:'Cierre',text:'"¿Les funciona esta semana o lo dejamos para después?"'}
+   ]},
+
+  {id:23,phase:'cliente',day:'Día 25 post-compra',n:'31',status:'',
+   title:'Correo Post-Venta 2 — Disponibilidad y tiempos',tags:['email'],
+   psych:['Urgencia suave','Escasez real','Servicio personalizado'],
+   timing:'Correo a los 25 días de la última compra. Se reinicia con cada nueva compra.',
+   subject:'Disponibilidad y tiempos de entrega',
+   email:`Que tal [Nombre],
+
+Te escribo porque en estos días varios clientes están reabasteciendo y algunos productos comienzan a moverse rápido.
+
+Quería preguntarte si tienen previsto hacer pedido próximamente, para poder asegurarles disponibilidad y tiempos de entrega sin contratiempos.
+
+Si gustas, puedo apartar producto o sugerirte una reposición basada en tus compras anteriores.
+
+Quedo pendiente para apoyarte.
+
+[Nombre] — Jaguen — [teléfono]`,
+   emailNote:null,
+   script:null},
+
+  {id:31,phase:'cliente',day:'Día 30 post-compra',n:'32',status:'',
+   title:'Llamada Post-Venta 2',tags:['call'],
+   psych:['Urgencia suave','Disponibilidad','Servicio personalizado'],
+   timing:'Llamada a los 30 días de la última compra. Se reinicia con cada nueva compra.',
+   subject:null,email:null,emailNote:null,
+   script:[
+     {tag:'Apertura',text:'"Que tal [Nombre], Javier de Jaguen. Varios clientes en este punto ya están reabasteciendo — ¿ustedes cómo van?"'},
+     {tag:'Si están por pedir',text:'"Perfecto — ¿quieren que les aparte producto desde hoy para asegurar disponibilidad?"'},
+     {tag:'Si no es momento',text:'"Sin problema. ¿Para cuándo aproximadamente lo necesitarían? Con un día de anticipación es suficiente."'}
+   ]},
+
+  {id:24,phase:'cliente',day:'Día 35 post-compra',n:'33',status:'',
+   title:'Correo Post-Venta 3 — ¿Programamos el siguiente pedido?',tags:['email'],
+   psych:['Acción proactiva','Cierre directo','Conveniencia'],
+   timing:'Correo a los 35 días de la última compra. Se reinicia con cada nueva compra.',
+   subject:'¿Programamos su siguiente pedido?',
+   email:`Que tal [Nombre],
+
+Te contacto directamente porque ya pasó un tiempo desde tu último pedido y normalmente, en este punto, varios clientes ya están programando su siguiente compra para evitar interrupciones.
+
+Prefiero confirmarlo contigo antes de que avance más el mes:
+
+¿quieres que te apoye dejando listo un pedido base o lo dejamos para más adelante?
+
+Si no es buen momento, sin problema — solo dime y lo revisamos después.
+
+[Nombre] — Jaguen — [teléfono]`,
+   emailNote:null,
+   script:null},
+
+  {id:32,phase:'cliente',day:'Día 40 post-compra',n:'34',status:'',
+   title:'Llamada Post-Venta 3',tags:['call'],
+   psych:['Acción proactiva','Cierre directo','Conveniencia'],
+   timing:'Llamada a los 40 días de la última compra. Se reinicia con cada nueva compra.',
+   subject:null,email:null,emailNote:null,
+   script:[
+     {tag:'Apertura',text:'"Que tal [Nombre], Javier de Jaguen. Ya pasó más de un mes desde su último pedido — quería ver si les ayudo a programar el siguiente antes de que surja una urgencia."'},
+     {tag:'Propuesta',text:'"Puedo armarles un pedido base en base a lo que compraron antes — solo lo revisan y me dicen si cambia algo. ¿Les funciona esta semana?"'},
+     {tag:'Cierre',text:'"¿Para cuándo lo necesitarían? Con un día de anticipación es suficiente para tenerlo listo."'}
+   ]}
+];
+
+// merge
+steps.push(...stepsOriginal);
+
+// ── COUNTS ────────────────────────────────────────────────────────────
+const phases = ['leads','salespitch','demopitch','prospeccion','seguimiento','cotizado','milestone1','registrado','yacompro','cliente'];
+phases.forEach(p => {
+  const el = document.getElementById('cnt-'+p);
+  if(el) el.textContent = steps.filter(s=>s.phase===p).length;
+});
+document.getElementById('cnt-all').textContent = steps.length;
+document.getElementById('totalBadge').textContent = steps.length + ' etapas';
+
+let currentFilter = 'all';
+
+function filterPhase(phase, btn) {
+  currentFilter = phase;
+  document.querySelectorAll('.pbtn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderSteps();
+}
+
+// ── DIAGNOSTIC SYSTEM ────────────────────────────────────────────────
+const diagQuestions = [
+  {
+    id:'q1', num:'P1', label:'Estructura de compras',
+    why:'Revela complejidad operacional sin confrontar',
+    question:'Ahorita normalmente manejan todo con pocos proveedores o sí les toca comprar con varios?',
+    opts:[
+      { label:'Con varios proveedores',
+        meaning:'Más fricción, más seguimiento, más oportunidad',
+        crm:['dolor operativo alto','apertura media/alta'],
+        followup:'Enfatiza simplificación y centralización.' },
+      { label:'Con pocos / uno principal',
+        meaning:'Estructura estable. Probablemente resistentes.',
+        crm:['dolor operativo bajo/medio','apertura baja/media'],
+        followup:'Usa comparación sin riesgo. No confrontes.' },
+      { label:'Depende / varía',
+        meaning:'Flexibles, abiertos por categorías.',
+        crm:['apertura media','oportunidad selectiva'],
+        followup:'Detecta líneas débiles y ataca por ahí.' }
+    ]
+  },
+  {
+    id:'q2', num:'P2', label:'Prioridad real',
+    why:'Descubre el driver emocional de compra',
+    question:'¿Y normalmente qué termina siendo lo más importante para ustedes? ¿Rapidez? ¿Precio? ¿Que les contesten rápido? ¿O evitar faltantes?',
+    opts:[
+      { label:'Precio',
+        meaning:'Comprador racional. Compara mucho. Pero si luego menciona problemas: precio NO es el driver real.',
+        crm:['comprador racional','sensibilidad precio alta'],
+        followup:'Reposiciona hacia valor operacional. No pelees precio.' },
+      { label:'Servicio / atención / rapidez',
+        meaning:'Ya batalló antes. Dolor emocional oculto.',
+        crm:['dolor alto','apertura alta'],
+        followup:'Profundiza en estabilidad y seguimiento. Aquí ganas.' },
+      { label:'"Todo" / respuesta política',
+        meaning:'Evita conflicto. Probablemente sí tiene dolor pero no lo dice.',
+        crm:['dolor oculto','perfil diplomático'],
+        followup:'Sigue explorando suave. No presiones.' }
+    ]
+  },
+  {
+    id:'q3', num:'P3', label:'Fricción oculta',
+    why:'Difícil mentir completamente sobre procesos reales',
+    question:'Y por ejemplo, cuando algo urge… ¿normalmente sí sale rápido o sí les toca andar dando seguimiento?',
+    opts:[
+      { label:'"Sí sale rápido" (respuesta muy rápida)',
+        meaning:'Probable mentira diplomática. Observa el tono — si responde muy rápido, hay dolor oculto.',
+        crm:['dolor oculto','resistencia media'],
+        followup:'No confrontes. Continúa con posicionamiento.' },
+      { label:'"Depende" / "a veces"',
+        meaning:'Sí hay fricción. Respuesta moderada y honesta.',
+        crm:['dolor medio'],
+        followup:'Enfatiza estabilidad y confiabilidad.' },
+      { label:'"Sí batallamos a veces"',
+        meaning:'Dolor real. Oportunidad fuerte.',
+        crm:['dolor alto','apertura alta'],
+        followup:'Adapta TODO el pitch a este dolor específico. Muévete rápido.' }
+    ]
+  },
+  {
+    id:'q4', num:'P4', label:'Apertura al cambio',
+    why:'Parece operacional pero revela disposición real',
+    question:'Cuando necesitan algo nuevo normalmente sí comparan opciones o casi siempre manejan los mismos proveedores?',
+    opts:[
+      { label:'Sí comparamos',
+        meaning:'Abiertos, prácticos. Buena señal.',
+        crm:['apertura alta'],
+        followup:'Muévete rápido a prueba parcial.' },
+      { label:'Casi siempre los mismos',
+        meaning:'Resistencia media/alta. Estabilidad es su prioridad.',
+        crm:['apertura baja'],
+        followup:'Reduce el riesgo al mínimo. "Solo un pedido de prueba".' },
+      { label:'"Depende" / situacional',
+        meaning:'Apertura condicionada. Hay detonantes que la activan.',
+        crm:['apertura media'],
+        followup:'Detecta cuándo comparan — eso es tu ventana.' }
+    ]
+  },
+  {
+    id:'q5', num:'P5', label:'Madurez digital',
+    why:'Determina cómo adaptar el demo y onboarding',
+    question:'¿Normalmente cómo te gusta trabajar más: por llamada, WhatsApp, correo o sí te gusta usar plataformas?',
+    opts:[
+      { label:'Plataformas / sistema',
+        meaning:'Digital. Autonomía importante. Demo completa.',
+        crm:['digital'],
+        followup:'Demo completa — favoritos, historial, precios especiales.' },
+      { label:'WhatsApp o correo',
+        meaning:'Mixto. Adaptable.',
+        crm:['mixto'],
+        followup:'Muestra flexibilidad. "Como tú prefieras".' },
+      { label:'Todo por llamada / manual',
+        meaning:'Tradicional. Resistencia tecnológica.',
+        crm:['tradicional'],
+        followup:'NO empujes la página. Enfócate en atención personal.' }
+    ]
+  },
+  {
+    id:'q6', num:'P6', label:'Poder de decisión',
+    why:'Define si puedes cerrar aquí o necesitas otro contacto',
+    question:'¿Y normalmente tú ves todo eso directamente o lo revisan entre varias personas?',
+    opts:[
+      { label:'Yo decido directamente',
+        meaning:'Decisor. Puedes cerrar en esta visita.',
+        crm:['decisor'],
+        followup:'Muévete directo a CTA. No pierdas el momentum.' },
+      { label:'Entre varias personas / mi jefe',
+        meaning:'Venta múltiple. Necesitas más contactos.',
+        crm:['influencia'],
+        followup:'Pide el siguiente contacto. "¿Con quién más lo revisarían?"' },
+      { label:'Yo no decido / solo opero',
+        meaning:'Operativo. Conviértelo en aliado interno.',
+        crm:['operativo'],
+        followup:'Deja material. Pídele que te conecte con quien decide.' }
+    ]
+  }
+];
+
+const diagState = {}; // {q1: optIndex, q2: optIndex, ...}
+
+function renderDiag(stepId) {
+  let html = '<div class="diag-wrapper">';
+  html += '<div class="diag-phase-title">Selecciona la respuesta del comprador — el sistema determina el perfil y follow-up</div>';
+
+  diagQuestions.forEach(q => {
+    html += `<div class="diag-q-block" id="dq-${stepId}-${q.id}">
+      <div class="diag-q-header">
+        <span class="diag-q-num">${q.num}</span>
+        ${q.label}
+        <span class="diag-q-why">${q.why}</span>
+      </div>
+      <div class="diag-question">"${q.question}"</div>
+      <div class="diag-options">`;
+
+    q.opts.forEach((opt, i) => {
+      const sel = diagState[`${stepId}-${q.id}`] === i ? ' selected' : '';
+      html += `<div class="diag-opt${sel}" onclick="selectDiag(${stepId},'${q.id}',${i})">
+        <div class="diag-opt-btn">${opt.label}</div>
+        <div class="diag-opt-reveal">
+          <div class="diag-reveal-meaning">${opt.meaning}</div>
+          <div class="diag-crm-pills">${opt.crm.map(c=>`<span class="diag-crm-pill">${c}</span>`).join('')}</div>
+          <div class="diag-followup"><strong>Follow-up:</strong> ${opt.followup}</div>
+        </div>
+      </div>`;
+    });
+
+    html += `</div></div>`;
+  });
+
+  // Result bar
+  html += `<div class="diag-result-bar" id="diag-result-${stepId}">
+    <div class="diag-result-title">📊 Perfil del Comprador</div>
+    <div class="diag-metrics" id="diag-metrics-${stepId}"></div>
+    <div class="diag-next-label">Siguiente paso recomendado</div>
+    <div class="diag-next-steps" id="diag-next-${stepId}"></div>
+    <span class="diag-reset" onclick="resetDiag(${stepId})">Reiniciar diagnóstico</span>
+  </div>`;
+
+  html += '</div>';
+  return html;
+}
+
+function selectDiag(stepId, qId, optIdx) {
+  diagState[`${stepId}-${qId}`] = optIdx;
+  // re-render just that question block
+  const qData = diagQuestions.find(q=>q.id===qId);
+  const block = document.getElementById(`dq-${stepId}-${qId}`);
+  const optsDiv = block.querySelector('.diag-options');
+  optsDiv.querySelectorAll('.diag-opt').forEach((el,i)=>{
+    el.classList.toggle('selected', i===optIdx);
+  });
+  updateDiagResult(stepId);
+}
+
+function updateDiagResult(stepId) {
+  const answered = diagQuestions.filter(q => diagState[`${stepId}-${q.id}`] !== undefined);
+  if(answered.length < 3) return;
+
+  const bar = document.getElementById(`diag-result-${stepId}`);
+  bar.classList.add('visible');
+
+  // Build CRM tags
+  const allCrm = [];
+  answered.forEach(q => {
+    const idx = diagState[`${stepId}-${q.id}`];
+    allCrm.push(...q.opts[idx].crm);
+  });
+
+  // Determine temperature
+  const dolorAlto = allCrm.filter(c=>c.includes('dolor alto')).length;
+  const dolorMedio = allCrm.filter(c=>c.includes('dolor medio')||c.includes('dolor operativo alto')).length;
+  const aperturaAlta = allCrm.filter(c=>c.includes('apertura alta')||c.includes('apertura media/alta')).length;
+  const aperturaBaja = allCrm.filter(c=>c.includes('apertura baja')).length;
+
+  let temp, tempClass, nextSteps;
+  if(dolorAlto >= 1 && aperturaAlta >= 1){
+    temp='🔥 Caliente'; tempClass='hot';
+    nextSteps=['Demo inmediata','Cotización hoy','Pedido de prueba'];
+  } else if(dolorMedio >= 1 || (dolorAlto>=1 && aperturaBaja<1)){
+    temp='🌡️ Tibio'; tempClass='warm';
+    nextSteps=['Demo + correo hoy','Follow-up en 2 días','Cotización comparativa'];
+  } else if(aperturaBaja >= 2){
+    temp='❄️ Frío'; tempClass='cold';
+    nextSteps=['Correo post-visita','Nurturing 30 días','Retomar en ciclo'];
+  } else {
+    temp='⚪ Neutral'; tempClass='neutral';
+    nextSteps=['Demo si hay tiempo','Correo hoy','Follow-up semana siguiente'];
+  }
+
+  // Unique CRM pills
+  const unique = [...new Set(allCrm)];
+  const metricsEl = document.getElementById(`diag-metrics-${stepId}`);
+  metricsEl.innerHTML = `<span class="diag-metric ${tempClass}">${temp}</span>`
+    + unique.map(c=>`<span class="diag-metric neutral">${c}</span>`).join('');
+
+  const nextEl = document.getElementById(`diag-next-${stepId}`);
+  nextEl.innerHTML = nextSteps.map(s=>`<span class="diag-next-step">${s}</span>`).join('');
+}
+
+function resetDiag(stepId) {
+  diagQuestions.forEach(q => delete diagState[`${stepId}-${q.id}`]);
+  // Re-render the diagnostic pane
+  const pane = document.querySelector(`#sb-${stepId} .diag-wrapper`);
+  if(pane) pane.closest('.pane').innerHTML = renderDiag(stepId);
+  const bar = document.getElementById(`diag-result-${stepId}`);
+  if(bar) bar.classList.remove('visible');
+}
+
+function renderSteps() {
+  const list = document.getElementById('stepList');
+  const phaseOrder = ['leads','prospeccion','seguimiento','salespitch','demopitch','cotizado','milestone1','registrado','yacompro','cliente'];
+  let filtered = currentFilter === 'all'
+    ? [...steps].sort((a,b) => phaseOrder.indexOf(a.phase) - phaseOrder.indexOf(b.phase))
+    : steps.filter(s => s.phase === currentFilter);
+  document.getElementById('stepsCount').textContent = `Mostrando ${filtered.length} etapa${filtered.length!==1?'s':''}`;
+  list.innerHTML = '';
+  if(!filtered.length){ list.innerHTML='<div class="empty">No hay etapas en esta fase</div>'; return; }
+
+  let lastPhase = null;
+  filtered.forEach(s => {
+    if(currentFilter==='all' && s.phase!==lastPhase){
+      lastPhase = s.phase;
+      const info = phaseLabels[s.phase] || {label:s.phase, sub:''};
+      const div = document.createElement('div');
+      div.className = 'phase-divider';
+      div.innerHTML = `<span class="phase-divider-label">${info.label}</span>${info.sub?`<span class="phase-divider-sub">— ${info.sub}</span>`:''}<span class="phase-divider-line"></span>`;
+      list.appendChild(div);
+    }
+
+    const tagHTML = s.tags.map(t=>{
+      if(t==='email') return '<span class="tag tag-email">Correo</span>';
+      if(t==='call')  return '<span class="tag tag-call">Llamada</span>';
+      return '<span class="tag tag-action">Visita</span>';
+    }).join('');
+
+    const statusBadge = '';
+
+    const psychHTML = s.psych ? s.psych.map(p=>`<span class="psych-pill">${p}</span>`).join('') : '';
+
+    let emailPane = '';
+    if(s.email){
+      const tnote = s.timing ? `<div class="odoo-note"><strong>Timing:</strong> ${s.timing}</div>` : '';
+      const cnote = s.emailNote ? `<div class="change-note"><strong>Nota:</strong> ${s.emailNote}</div>` : '';
+      const onote = s.odooNote  ? `<div class="odoo-note"><strong>Plan Odoo:</strong> ${s.odooNote}</div>` : '';
+      emailPane = `<div class="pane active" id="pe-${s.id}">
+        ${tnote}${onote}${cnote}
+        <div class="email-subject"><strong>Asunto:</strong> ${s.subject}</div>
+        <div class="email-body">${s.email}</div>
+        ${psychHTML?`<div class="psych-section"><div class="psych-label">Principios de persuasión</div><div class="psych-pills">${psychHTML}</div></div>`:''}
+      </div>`;
+    }
+
+    let scriptPane = '';
+    if(s.script){
+      const active  = s.email ? '' : ' active';
+      const onote   = s.odooNote ? `<div class="odoo-note"><strong>Plan Odoo:</strong> ${s.odooNote}</div>` : '';
+      const lines   = s.script.map(l=>{
+        const sn = l.note ? `<div class="script-note">${l.note}</div>` : '';
+        const textWithName = l.text.replace(/\[Nombre\]/g, `<span class="cis-comprador-corto">${callState ? (callState.nombreCorto || '[Nombre]') : '[Nombre]'}</span>`).replace(/\[Javier\]/g, 'Javier');
+        return `<div class="script-item"><div class="script-tag">${l.tag}</div><div class="script-text">${textWithName}</div>${sn}</div>`;
+      }).join('');
+      scriptPane = `<div class="pane${active}" id="pc-${s.id}">${onote}<div class="script-steps">${lines}</div></div>`;
+    }
+
+    const hasBoth  = s.email && s.script;
+    const onlyCall = s.script && !s.email;
+    let tabBar = '';
+    if(s.isInteractiveCall) {
+      tabBar = `<div class="tab-bar"><div class="tab active">Script Interactivo de Llamadas</div></div>`;
+      scriptPane = `<div class="pane active" id="pc-300">${renderInteractiveCall()}</div>`;
+    } else if(s.isInteractiveFollowUp) {
+      if(s.email) {
+        // Two tabs: Correo (active) + Script de llamada
+        tabBar = `<div class="tab-bar">
+          <div class="tab active" onclick="switchTab(${s.id},'pe','pc',this)">Correo</div>
+          <div class="tab" onclick="switchTab(${s.id},'pc','pe',this)">Script de llamada</div>
+        </div>`;
+        // emailPane already built above — ensure it's active, script is inactive
+        const fuEmailPane = emailPane; // already has 'pane active'
+        scriptPane = fuEmailPane + `<div class="pane" id="pc-${s.id}">${renderInteractiveFollowUp()}</div>`;
+      } else {
+        const tabLabel = s.id === 6 ? 'Visita' : 'Script de llamada';
+        tabBar = `<div class="tab-bar"><div class="tab active">${tabLabel}</div></div>`;
+        scriptPane = `<div class="pane active" id="pc-${s.id}">${renderInteractiveFollowUp()}</div>`;
+      }
+    } else if(s.isInteractivePitch) {
+      tabBar = `<div class="tab-bar"><div class="tab active">Script + Diagnóstico Interactivo</div></div>`;
+      scriptPane = `<div class="pane active" id="pc-200">${renderInteractivePitch()}</div>`;
+    } else if(hasBoth) tabBar = `<div class="tab-bar"><div class="tab active" onclick="switchTab(${s.id},'pe','pc',this)">Correo</div><div class="tab" onclick="switchTab(${s.id},'pc','pe',this)">Script de llamada</div></div>`;
+    else if(onlyCall) tabBar = `<div class="tab-bar"><div class="tab active">${s.id === 6 ? 'Visita' : 'Script de llamada'}</div></div>`;
+    else if(s.email)  tabBar = `<div class="tab-bar"><div class="tab active">Correo</div></div>`;
+
+    const cardClass = 'step-card'
+      +(s.phase==='cotizado'?' milestone isnew'
+      :s.phase==='salespitch'?' salespitch-card isnew'
+      :s.phase==='demopitch'?' demopitch-card isnew'
+      :s.status==='new'?' isnew'
+      :s.status==='updated'?' updated':'');
+    const card = document.createElement('div');
+    card.className = cardClass;
+    const dayClass = s.phase==='salespitch'?'step-day sp-day':s.phase==='demopitch'?'step-day dp-day':'step-day';
+
+    card.innerHTML = `
+      <div class="step-header" onclick="toggleCard(${s.id})">
+        <span class="step-n">${s.n}</span>
+        <span class="${dayClass}">${s.day}</span>
+        <span class="step-title">${s.title}</span>
+        <div class="step-tags">${tagHTML}${statusBadge}</div>
+        <span class="step-chev" id="chev-${s.id}">▾</span>
+      </div>
+      <div class="step-body" id="sb-${s.id}">${tabBar}${s.isInteractiveFollowUp ? scriptPane : emailPane+scriptPane}</div>`;
+    list.appendChild(card);
+  });
+}
+
+// ── INTERACTIVE PITCH ────────────────────────────────────────────────
+const pitchFlow = [
+
+  // FASE 1 — APERTURA Y RAPPORT
+  { type:'script', label:'Fase 1 — Apertura y Rapport', timing:'1–2 min',
+    color:'var(--green-light)', colorText:'var(--green-dark)',
+    script:'"¿Qué tal [Nombre], ¿cómo estás?\n\nOye, mi asistente me comentó que habló contigo hace unos días y me dio un poquito de contexto de cómo trabajan ustedes, entonces quiero ser súper respetuoso con tu tiempo.\n\nTe platico rapidito qué hacemos nosotros y tú me dices si hace sentido o no, ¿te parece?"',
+    pause:'⏸ PAUSA',
+    script2:'"Nosotros somos distribuidores directos de fábrica de productos de:\n\nPapelería de Oficina\nLimpieza Institucional\nCómputo y Tecnología\nEmpaque Industrial\nPromocionales\nHigiene Personal\nSeguridad Industrial\nCafetería\nFerretería\nVarios."',
+    note:'Tono tranquilo. Como quien ya tiene clientes. No apurado.' },
+
+  // RAPPORT — PREGUNTAS DE RELACIÓN
+  { type:'script', label:'Rapport — Preguntas de Relación', timing:'1–2 min',
+    color:'var(--green-light)', colorText:'var(--green-dark)',
+    script:'"Una pregunta — ahorita todo lo de papelería y cómputo, ¿a quién se lo compras?"',
+    pause:'⏸ ESCUCHAR',
+    script2:'"¿Y ahí quién te atiende?"',
+    pause2:'⏸ ESCUCHAR',
+    script3:'"¿Y los productos de Limpieza, ¿a quién se lo compras?"',
+    pause3:'⏸ ESCUCHAR',
+    script4:'"¿Y si necesitas comprar algo fuera de lo normal, algo raro, puedes comprarlo donde sea o tiene que ser con ciertos proveedores en específico?"',
+    pause4:'⏸ ESCUCHAR TODO. No interrumpas. Esta información es oro.',
+    note:'Rapport genuino + anclar al comprador en las personas de sus proveedores actuales. Cuando después hablas de "todo depende del vendedor", ya tiene caras en mente. NO son preguntas de scoring.' },
+
+  // P1 — ESTRUCTURA (SCORING)
+  { type:'diag', label:'P1 — Estructura de Proveedores', id:'p1',
+    script:'"¿Ahorita manejan esto con varios proveedores o concentran la mayoría con pocos?"',
+    opts:[
+      { label:'Con varios proveedores',
+        meaning:'Dolor operativo alto. Mucha coordinación, mucho seguimiento. Más apertura.',
+        crm:['dolor-op-alto','apertura-alta'],
+        fw:'Énfasis en consolidación. "Con nosotros un solo proveedor para todo."',
+        scores:{ demo:2, cotizacion:2, registro:0, ale2:0 } },
+      { label:'Con pocos / uno principal',
+        meaning:'Estructura estable. Resistencia al cambio. Comodidad operacional.',
+        crm:['dolor-op-bajo','apertura-baja'],
+        fw:'Comparación sin riesgo. No buscamos que cambien todo.',
+        scores:{ demo:0, cotizacion:0, registro:2, ale2:1 } },
+      { label:'Depende / mixto',
+        meaning:'Apertura selectiva. Hay categorías débiles.',
+        crm:['apertura-media'],
+        fw:'Pregunta qué categorías les dan más problemas.',
+        scores:{ demo:1, cotizacion:1, registro:1, ale2:0 } }
+    ]},
+
+  // FASE 2 — DIAGNÓSTICO NATURAL
+  { type:'script', label:'Fase 2 — Diagnóstico Natural', timing:'2–3 min',
+    color:'var(--green-light)', colorText:'var(--green-dark)',
+    script:'"Sí, muchas empresas trabajan así normalmente."',
+    pause:'⏸ PAUSA',
+    script2:'"Y por ejemplo… cuando necesitas algo urgente…\n¿normalmente sí sale rápido o sí toca andar correteando cotizaciones, pedidos o entregas?"',
+    pause2:'⏸ ESCUCHAR',
+    script3:'"Sí… eso pasa muchísimo en estos giros.\n\n¿A ti sí te ha tocado algo así de repente?"',
+    pause3:'⏸ ESCUCHAR — tono casual, no interrogatorio',
+    script4:'"Porque luego el problema ni siquiera es el producto o los precios. El problema es:\n\nLe marcas al vendedor, a veces no contesta las llamadas y nunca las devuelven.\nLe mandas WhatsApp y te dejan en leído.\nLe mandas correo y no te responden ni con Recibido u Ok gracias.\nLe solicitas una cotización y no te la manda."',
+    pause4:'⏸ PAUSA',
+    script5:'"Cuando por fin te manda la cotización, te das cuenta que agregó los productos que quiere o tiene.\n\nHiciste pedido hace 2–3 días, aún no llega y el vendedor ya no toma llamada y se tarda horas en responder WhatsApp. Cuando lo hace, nomás te dice que el pedido ya va en camino.\n\nMarcas a la oficina y te dicen que no saben nada de tu cotización o el pedido."',
+    pause5:'⏸ PAUSA',
+    script6:'"Hiciste pedido hace varios días, ya por fin alguien te dice \'ya va en camino\' y nomás no llega — te dicen mentiras.\n\nPrimero te ignoran, luego te mienten. Si mencionas que estás quedando mal por culpa de ellos, ¡se ofenden!\n\nMarcas a la oficina para que te ayuden porque estás batallando con el vendedor y te contestan que TODO lo tienes que ver con él.\n\nYa para cuando llega el pedido, con faltantes o unas cosas por otras, todo tu equipo te echa la culpa a ti — es tu proveedor, tú lo escogiste, o tú le sigues comprando."',
+    pause6:'⏸ PAUSA',
+    script7:'"Y la verdad… cuando nosotros hacemos las cosas normales que todo mundo debería de hacer, nos aplauden y los impresionamos.\n\nNosotros somos muy aburridos y sin drama — haces un pedido y al día siguiente te llega completo, facturado y sin errores."',
+    note:'Dejar que el comprador llene los silencios. Todo lo que diga es información.' },
+
+  // P2 — PRIORIDAD (SCORING)
+  { type:'diag', label:'P2 — Prioridad Real', id:'p2',
+    script:'"¿Qué termina siendo más importante para ustedes normalmente — precio, rapidez, atención o evitar faltantes?"',
+    opts:[
+      { label:'Precio',
+        meaning:'Comprador racional. Quiere números. Si luego menciona problemas — precio no era el driver real.',
+        crm:['precio-driver'],
+        fw:'Dale números rápido. Cotización directa.',
+        scores:{ demo:0, cotizacion:3, registro:0, ale2:0 } },
+      { label:'Atención / servicio / rapidez',
+        meaning:'Ya sufrió mala atención. Dolor emocional. Alto potencial.',
+        crm:['dolor-alto','apertura-alta'],
+        fw:'Este es tu mayor ángulo. Profundiza aquí.',
+        scores:{ demo:2, cotizacion:2, registro:0, ale2:0 } },
+      { label:'"Todo" / respuesta política',
+        meaning:'Evita mostrar problemas. Dolor oculto probable.',
+        crm:['dolor-oculto'],
+        fw:'No presiones. Sigue explorando suave.',
+        scores:{ demo:0, cotizacion:0, registro:1, ale2:2 } }
+    ]},
+
+  // FASE 3 — DOLOR + SUNK COST DEL PROVEEDOR ACTUAL
+  { type:'script', label:'Fase 3 — Dolor + Sunk Cost del Proveedor Actual', timing:'2–3 min',
+    color:'var(--green-light)', colorText:'var(--green-dark)',
+    script:'"Porque al final del día… tú como comprador realmente estás para:\n\nAgregar valor a la empresa\nAtender las necesidades de tus compañeros\nMantener todo funcionando bien sin cuellos de botella porque algo falta\nY que cuando algo salga mal, nadie pueda usar de excusa que \'fue por culpa del área de compras\'.\n\nTú no estás para perder tiempo apagando fuegos de los proveedores."',
+    pause:'⏸ PAUSA',
+    script2:'"Y te digo algo… la mayoría de las empresas ya tiene proveedor cuando las conocemos.\n\nEso es completamente normal."',
+    pause2:'⏸ PAUSA',
+    script3:'"De hecho… muchos clientes llegan conmigo diciéndome:\n\n\'Pues sí batallamos… pero ya conocemos cómo trabajan.\'\n\nY honestamente: para un comprador no hay nada más fácil que no hacer nada."',
+    pause3:'⏸ PAUSA — dejar que eso aterrice',
+    script4:'"Porque cambiar proveedor da flojera, implica invertir tiempo en cotizar, ver opciones de productos. El cambio y la incertidumbre dan miedo.\n\nY si el nuevo sale peor… el problema te cae a ti.\n\nY conociendo a mi competencia, son miedos válidos porque todos son iguales…"',
+    pause4:'⏸ PAUSA',
+    script4b:'"Porque al final cuando algo falla, compras siempre queda en medio, ¿no?"',
+    pause4b:'⏸ PAUSA — eso normalmente hace que asientan automáticamente.',
+    script5:'"Entonces nosotros entendemos perfectamente eso. Por eso no buscamos que cambies todo de golpe.\n\nLo que sí te puedo decir es: conforme nos pruebes, te vas a dar cuenta que no nos puedes ni comparar con los proveedores que ahorita tienes."',
+    note:'★ OBJECIÓN MATADA: "Ya tenemos proveedor"\nValidas el miedo primero, luego siembras la curiosidad. El "no nos puedes ni comparar" es confianza, no arrogancia. Dilo tranquilo.' },
+
+  // P3 — FRICCIÓN (SCORING)
+  { type:'diag', label:'P3 — Fricción Real', id:'p3',
+    script:'"Y honestamente…\n¿a ustedes sí les toca batallar con seguimiento o normalmente todo fluye bien?"',
+    opts:[
+      { label:'"Sí batallamos" / hay fricción',
+        meaning:'Dolor alto y declarado. Oportunidad fuerte.',
+        crm:['dolor-alto','apertura-alta'],
+        fw:'Dolor declarado = oportunidad inmediata. Cotización.',
+        scores:{ demo:1, cotizacion:3, registro:0, ale2:0 } },
+      { label:'"Depende" / a veces',
+        meaning:'Fricción moderada. Respuesta honesta.',
+        crm:['dolor-medio'],
+        fw:'Enfatiza estabilidad y consistencia.',
+        scores:{ demo:1, cotizacion:0, registro:2, ale2:0 } },
+      { label:'"No, todo bien"',
+        meaning:'Probable mentira diplomática. Respuesta rápida = dolor oculto.',
+        crm:['dolor-oculto','resistencia-media'],
+        fw:'No confrontes. Deja que el demo hable.',
+        scores:{ demo:0, cotizacion:0, registro:1, ale2:2 } }
+    ]},
+
+  // FASE 4 — POSICIONAMIENTO JAGUEN
+  { type:'script', label:'Fase 4 — Posicionamiento Jaguen', timing:'2–3 min',
+    color:'var(--green-light)', colorText:'var(--green-dark)',
+    script:'"Y te digo, al final del día nosotros no vendemos productos.\n\nLo que ofrecemos es:\n\nServicio — Productos disponibles y entregas al siguiente día\nAtención — Siempre mantener contacto, contestar y regresar llamadas, cotizaciones el mismo día\nEstabilidad — No hay sorpresas\nY cero drama."',
+    pause:'⏸ 2 SEGUNDOS COMPLETOS. No sigas.',
+    script1b:'"Y honestamente… así debería funcionar siempre, ¿no?"',
+    pause1b:'⏸ PAUSA — dejar que asienta. No llenes el silencio.',
+    script2:'"En Jaguen no pasa eso de:\n\nAhorita te marco — y nunca te marcan.\nTe mandé la cotización busca tu correo — y no hay nada.\nYa va en camino — y llega el día siguiente o hasta que vuelves a preguntar por él.\nNo te mandé el archivo porque no tenemos sistema — y a esperar y corretear archivos…"',
+    pause2:'⏸ PAUSA',
+    script3:'"En Jaguen, tú haces un pedido y al día siguiente te llega completo con lo que pediste, sin errores y facturado.\n\nY parece algo básico…\npero tristemente en este giro no es tan común."',
+    pause3:'⏸ PAUSA',
+    script4:'"Porque al final lo que quieres es resolver rápido y ya olvidarte del tema, ¿no?"',
+    pause4:'⏸ PAUSA — esa frase hace que asienta automáticamente. Déjala aterrizar.',
+    note:'Hablar lento. Las pausas aquí son dinero.\n\n★ MV3: resolver rápido y olvidarte del tema — valida su identidad como comprador. Es de las frases más poderosas del pitch.' },
+
+  // FASE 5 — PREGUNTAS DE COMPARACIÓN MENTAL
+  { type:'script', label:'Fase 5 — Preguntas de Comparación Mental', timing:'1–2 min',
+    color:'var(--green-light)', colorText:'var(--green-dark)',
+    script:'"Por ejemplo… cuando ustedes mandan una cotización…\n¿normalmente sí se las responden rápido o sí hay que darle seguimiento?"',
+    pause:'⏸ ESCUCHAR',
+    script2:'"Sí… eso me lo dicen muchísimo."',
+    pause2:'⏸ PAUSA',
+    script3:'"Y por ejemplo… cuando algo urge…\n¿sí te contestan rápido las llamadas o mensajes?"',
+    pause3:'⏸ ESCUCHAR',
+    script4:'"Porque hay proveedores donde:\nsi el vendedor no contesta, nadie te ayuda.\n\nMarcas a oficina y te dicen:\n\'todo lo tienes que ver con él.\'\n\nNo te dan ganas o nunca les has preguntado — y si la persona sale de vacaciones o se va de la empresa, ¿quién te ayuda en esos casos?"',
+    pause4:'⏸ PAUSA',
+    script5:'"Nosotros no trabajamos así."',
+    note:'El comprador compara mentalmente a su proveedor actual con Jaguen — sin que tú ataques a nadie.' },
+
+  // FASE 6 — SERVICIO Y ATENCIÓN
+  { type:'script', label:'Fase 6 — Servicio y Atención', timing:'1–2 min',
+    color:'var(--green-light)', colorText:'var(--green-dark)',
+    script:'"Nosotros manejamos algo muy sencillo, atención y servicio."',
+    pause:'⏸ PAUSA',
+    script2:'"Siempre se contestan llamadas, aunque sea para decirte:\n\'Regálame 5 minutos y te regreso la llamada.\'\nPero nunca desaparecemos."',
+    pause2:'⏸ PAUSA',
+    script3:'"Las cotizaciones quedan:\nInmediatamente si lo haces por la página, o\nel mismo día si lo solicitaste por correo o WhatsApp."',
+    pause3:'⏸ PAUSA',
+    script4:'"Porque honestamente, al final del día no debería haber pendientes."',
+    pause4:'⏸ PAUSA',
+    script5:'"Y te digo algo, yo conozco perfectamente a la competencia.\nY no todo mundo tiene buena atención."',
+    note:'Compromisos específicos. No claims vagos.' },
+
+  // P4 — APERTURA REAL (SCORING)
+  { type:'diag', label:'P4 — Apertura Real al Cambio', id:'p4',
+    script:'"Cuando alguien nuevo les cotiza…\n¿normalmente sí le dan oportunidad de comparar o casi siempre siguen trabajando igual?"',
+    opts:[
+      { label:'Sí comparamos / sí damos oportunidad',
+        meaning:'Apertura alta. Comportamiento histórico exploratorio.',
+        crm:['apertura-alta'],
+        fw:'Este cliente ya prueba proveedores. Muévete rápido.',
+        scores:{ demo:2, cotizacion:2, registro:0, ale2:0 } },
+      { label:'"Depende" / necesitan detonante',
+        meaning:'Apertura situacional. Necesitan razón concreta.',
+        crm:['apertura-media'],
+        fw:'Detecta el detonante.',
+        scores:{ demo:1, cotizacion:0, registro:2, ale2:0 } },
+      { label:'Casi siempre seguimos igual',
+        meaning:'Resistencia alta. Comodidad. Baja urgencia.',
+        crm:['apertura-baja','resistencia-alta'],
+        fw:'Reduce riesgo al mínimo. Si no cede — Seguimiento.',
+        scores:{ demo:0, cotizacion:0, registro:1, ale2:2 } }
+    ]},
+
+  // FASE 7 — INVENTARIO Y ENTREGAS
+  { type:'script', label:'Fase 7 — Inventario y Entregas', timing:'1–2 min',
+    color:'var(--green-light)', colorText:'var(--green-dark)',
+    script:'"Ahora, otro tema importantísimo: el inventario."',
+    pause:'⏸ ESPERA',
+    script2:'"Porque muchas veces el problema es que no se preocupan por las necesidades de los clientes:\n\nTienen Faltantes — y te dicen: \'no hay y hazle como puedas\'\nCambios de especificaciones — y te dicen: \'no había #7 y te mandé el #8\'\nSustituciones — pediste marca Bic y te mandan marca Baco pero te dejan el precio de la Bic.\n\nY el problema es que:\ntú como comprador terminas quedando mal internamente, en tu empresa y con tus compañeros…\npor errores que ni siquiera fueron tuyos."',
+    pause2:'⏸ PAUSA — ese punto duele. Déjalo.',
+    script2b:'"Y eso es lo más frustrante, ¿verdad? Que te caiga el problema a ti cuando ni fue tu error."',
+    pause2b:'⏸ PAUSA — dejar que lo sienta.',
+    script3:'"Entonces nosotros tratamos de manejar inventarios inteligentes, usando máximos y mínimos de acuerdo a las ventas y a la retroalimentación que recibimos de ustedes, los compradores, nuestros socios comerciales.\n\nNormalmente intentamos tener entre uno y dos meses de inventario de los productos de línea.\n\nPorque también las fábricas se atoran:\nBackorders\nImportaciones\nRetrasos\nlo típico.\n\nEntonces preferimos estar preparados."',
+    note:'★ OBJECIÓN MATADA: "¿Y si no tienen lo que necesito?"\nLa presión de "quedar mal por errores que no fueron tuyos" existe en todo comprador.' },
+
+  // FASE 8 — GARANTÍA Y EXPECTATIVAS REALES
+  { type:'script', label:'Fase 8 — Garantía y Expectativas Reales', timing:'1 min',
+    color:'var(--green-light)', colorText:'var(--green-dark)',
+    script:'"Obviamente también somos muy transparentes."',
+    pause:'⏸ PAUSA',
+    script2:'"Si tú me pides algo que no lo tengo de línea, se te avisa desde que me informas del producto.\n\nDe acuerdo a tu consumo mensual podemos hacer dos cosas:\nSi lo necesitas solo una vez y no será recurrente, se consigue y ahí quedó.\nSi lo vas a estar solicitando cada mes y con X cantidad, vemos cómo vienen los corrugados de fábrica y de ahí partimos.\n\nPero lo normal, siempre hay."',
+    pause2:'⏸ PAUSA',
+    script3:'"Y lo único que sí les pedimos a los clientes es:\ndame una idea más o menos de qué consumes normalmente y en qué cantidades.\n\nPorque así ya nos programamos contigo."',
+    note:'Transparencia = confianza. No sobrevendas.' },
+
+  // FASE 9 — DIFERENCIADOR AMAZON / MARKETPLACE
+  { type:'script', label:'Fase 9 — Compras Varios: Amazon o MercadoLibre', timing:'1 min',
+    color:'var(--green-light)', colorText:'var(--green-dark)',
+    script:'"Y aparte manejamos algo que a muchos clientes les ayuda muchísimo."',
+    pause:'⏸ PAUSA',
+    script2:'"Si en algún momento llegas a necesitar algo que vieron en una tienda o que vieron en internet:\n\nPero no tienes manera como comprarlo, o como traerlo, y no sabes si te van a dar factura o no puedes estar al pendiente de la entrega…\n\nO quieres algo de algún lado pero ya sabes que va a pasar:\nEn línea — vas a batallar para conseguir factura y tienes que crear cuentas en todos lados.\nSi compras en Amazon y el vendedor es Amazon no se batalla.\nPero luego le compras a un tercero, lo mismo en MercadoLibre, y te das cuenta que probablemente no habrá factura…\n\n¿Ahí qué hacen?"',
+    pause2:'⏸ PAUSA',
+    script3:'"Nosotros te ayudamos con eso también.\n\nTú me mandas el producto y nosotros resolvemos.\n\nTe entregamos el producto facturado. Sin drama."',
+    note:'Convierte la competencia en un servicio adicional.' },
+
+  // P5 — URGENCIA / TIMING (SCORING)
+  { type:'diag', label:'P5 — Urgencia / Timing', id:'p5',
+    script:'"¿Ahorita están relativamente estables con sus proveedores o sí han tenido temas recientemente?"',
+    opts:[
+      { label:'"Sí hemos tenido temas" 🔥',
+        meaning:'Timing perfecto. La señal más importante de todas.',
+        crm:['urgencia-alta','timing-ahora'],
+        fw:'No lo dejes enfriar. Cotización o demo ahora mismo.',
+        scores:{ demo:2, cotizacion:3, registro:0, ale2:0 } },
+      { label:'"Más o menos" / algunos detalles',
+        meaning:'Dolor moderado. Oportunidad media.',
+        crm:['urgencia-media'],
+        fw:'Demo + correo hoy para mantener momentum.',
+        scores:{ demo:1, cotizacion:1, registro:1, ale2:0 } },
+      { label:'"No, todo bien" / estables',
+        meaning:'Baja urgencia. Sin timing activo.',
+        crm:['urgencia-baja'],
+        fw:'Registro suave y regresar a Seguimiento.',
+        scores:{ demo:0, cotizacion:0, registro:1, ale2:2 } }
+    ]},
+
+  // FASE 10 — OBJECIONES MATADAS: PRECIO
+  { type:'script', label:'Fase 10 — Objeciones Matadas: Precio', timing:'3–4 min',
+    color:'var(--green-light)', colorText:'var(--green-dark)',
+    script:'"Oye [Nombre], y hablando de proveedores, te voy a ser honesto desde el principio:\nnosotros no somos ni los más baratos ni los más caros.\nY aun así, damos el mejor valor para los clientes."',
+    pause:'⏸ PAUSA',
+    script2:'"Piénsalo así, ¿cuánto vale para ti:\n\nQue te contesten siempre, que se preocupen de verdad por tu trabajo — ¿cuánto es eso para ti? ¿1%?\n\nSaber que todo el personal puede ayudarte, no solo tu vendedor — ¿1%?\n\nQue tus pedidos siempre lleguen completos, exactamente lo que pediste — ¿1%?\n\nQue tus pedidos lleguen al día siguiente, siempre — ¿1%?\n\nQue cuando necesites algo fuera de lo común, lo conseguimos y te lo entregamos — ¿1%?\n\nTener un solo proveedor en vez de cinco, ocho o más, y recuperar todo ese tiempo — ¿1%?\n\nNo volver a batallar nunca más con seguimientos, errores o apagar incendios — ¿1%?\n\nY aparte… mejorar tanto la productividad de tu departamento y que nadie te pueda echar la culpa, que hasta los jefes se van a dar cuenta que hiciste cambios buenos y mejoras — ¿eso cuánto vale para ti?"',
+    pause2:'⏸ PAUSA — dejar que sume',
+    script3:'"Porque siendo muy honestos, en algunos productos más baratos que la competencia.\nEn otros productos un poco más arriba.\nComo en todos lados.\n\nLa diferencia es lo que viene con el precio."',
+    pause3:'⏸ PAUSA',
+    script4:'"Y otra cosa, dependiendo del volumen mensual de compra, podemos hablar de descuentos adicionales.\n\nEso aplica especialmente si van consolidando varias líneas con nosotros — papelería, limpieza, cafetería, cómputo — en lugar de tenerlas dispersas con diferentes proveedores.\n\nQue sucede aquí: en vez de que seas un cliente chico de poca importancia con varios proveedores, te vuelves un cliente importante para mí porque me compras varias líneas."',
+    pause4:'⏸ PAUSA',
+    script5:'"¿Hace sentido?"',
+    note:'★ OBJECIÓN MATADA: "Están muy caros / me lo dejan más barato"\nNo defiendes el precio — haces que el comprador lo calcule él mismo. Tono conversacional, como plática entre amigos.' },
+
+  // FASE 11 — PROCESO DE ALTA Y RIESGO DE CAMBIO
+  { type:'script', label:'Fase 11 — Proceso de Alta y Riesgo de Cambio', timing:'1–2 min',
+    color:'var(--green-light)', colorText:'var(--green-dark)',
+    script:'"Y mira, sé que a veces lo que nos detiene no es el precio.\n\nEs el proceso del cambio. Es pensar:\n\n\'Tengo que dar de alta al proveedor.\nTengo que llenar formatos.\nTengo que pedirle autorización a alguien.\'\n\nEntiendo eso perfectamente."',
+    pause:'⏸ PAUSA',
+    script2:'"Por eso lo hicimos lo más fácil, sencillo y rápido posible.\n\nRegistrarte en jaguen.com toma menos de 5 minutos — solo necesitas tu constancia de situación fiscal.\n\nNosotros también te podemos dar de alta en nuestro sistema en menos de 15 minutos.\n\nY si en tu empresa el proceso interno de dar de alta proveedores toma más tiempo — sin problema.\nEmpezamos y avanzamos mientras tanto."',
+    pause2:'⏸ PAUSA',
+    script3:'"Al final no estás comprometido a nada:\npide un pedido de prueba.\n\nSi no cumplimos…\nAquí no hay contratos y no hay compromisos.\nSi no cumplimos tus expectativas, simplemente no nos vuelves a comprar.\n\nAsí de sencillo."',
+    note:'★ OBJECIÓN MATADA: "No tengo tiempo para cambiar procesos" + "¿Y si salen mal?"\nNombrar el freno antes de que lo digan genera confianza inmediata.' },
+
+  // FASE 12 — CRÉDITO
+  { type:'script', label:'Fase 12 — Crédito: Filosofía Jaguen', timing:'1 min',
+    color:'var(--green-light)', colorText:'var(--green-dark)',
+    script:'"Y el tema de crédito, sí, también manejamos crédito."',
+    pause:'⏸ PAUSA',
+    script2:'"Tenemos una filosofía muy sencilla:\nel crédito es para que te funcione a ti, no para que te complique la vida.\n\nNormalmente manejamos 15 o 30 días dependiendo del cliente.\n\nY algo importante: nosotros entendemos que de repente se atora la carreta.\nNo por mala paga, sino que se les pasa, se traspapaló la factura, el de la firma no estaba o estás esperando que un cliente grande también te pague…\n\nNosotros no somos una empresa que bloquea clientes al primer retraso.\n\nSí esperamos que se pague puntual — eso es lo normal.\nPero si hay un imprevisto y necesitas unos días más, no pasa nada…\nnos avisas, nos das fecha de promesa de pago y seguimos operando como si nada."',
+    pause2:'⏸ PAUSA',
+    script3:'"Si te interesa el crédito, las condiciones y la solicitud están en jaguen.com. Hasta abajo a la izquierda.\nToma entre 10 y 20 minutos llenarla.\n\nY una vez aprobada, arrancamos con esas condiciones desde el primer pedido."',
+    note:'★ OBJECIÓN MATADA: "Mi proveedor actual me da crédito"\nPresentar el crédito como parte natural del pitch lo convierte en diferenciador, no en negociación.' },
+
+  // FASE 13 — LO BARATO SALE CARO
+  { type:'script', label:'Fase 13 — Lo Barato Sale Caro', timing:'2 min',
+    color:'var(--green-light)', colorText:'var(--green-dark)',
+    script:'"Y te voy a preguntar algo que siempre pregunto:\n\n¿De qué sirve que te digan que la caja de papel cuesta 800 pesos…\nsi siempre que los llamas te dicen que no hay?\n\nY luego te aplican la de:\n\'No tengo la económica que quieres, pero sí tengo la cara, ¿te la mando?\'\nCasi casi como si te estuvieran haciendo un favor…\nY si les preguntas ¿para cuándo llega?, la contestación es: ¡Sabrá Dios!\n\nMuchas veces las diferencias reales de precio entre proveedores son pequeñas.\nEl problema es cuando el proveedor barato no tiene inventario, no contesta o te termina cambiando productos.\nAhí lo barato sale caro.\n\nPorque tú como compras no nada más administras precios…\nadministras que la operación siga funcionando."',
+    pause:'⏸ PAUSA — dejar que calcule',
+    script2:'"¿Cuánto vale para ti saber que haces un pedido…\ny simplemente llega?\n\nSin perseguir gente.\nSin errores.\nSin apagar fuegos.\nSin quedar mal con tus compañeros."',
+    pause2:'⏸ PAUSA COMPLETA. No la llenes.',
+    note:'Los ejemplos concretos (caja de papel, pluma Pointec) son más potentes que cualquier argumento abstracto. El comprador ya vivió algo parecido.' },
+
+  // FASE 14 — REDUCCIÓN DE RIESGO
+  { type:'script', label:'Fase 14 — Reducción de Riesgo', timing:'1–2 min',
+    color:'var(--green-light)', colorText:'var(--green-dark)',
+    script:'"Y algo importante, nosotros no buscamos que cambies todo de golpe."',
+    pause:'⏸ PAUSA',
+    script2:'"De hecho normalmente recomendamos lo contrario, dependiendo de qué tanto batallas ahorita con tus proveedores.\n\nPónnos a prueba y compáranos.\n\nPide una parte con tu proveedor actual de nuestras líneas y una parte con nosotros."',
+    pause2:'⏸ PAUSA',
+    script3:'"Y ya tú solo comparas:\n\natención\nrapidez\nseguimiento\nentrega\nfacilidad\ny servicio.\n\nSi no mejoramos nada…\nno hay necesidad de moverle."',
+    note:'Elimina el riesgo percibido de cambio. No están cambiando de proveedor — solo comparando.' },
+
+  // P6 — DECISIÓN (SCORING)
+  { type:'diag', label:'P6 — Poder de Decisión', id:'p6',
+    script:'"¿Normalmente tú ves esto directamente o lo revisan entre varias personas?"',
+    opts:[
+      { label:'Yo decido directamente',
+        meaning:'Decisor. Puede avanzar ahora mismo.',
+        crm:['decisor'],
+        fw:'No pierdas el momentum. Directo al CTA.',
+        scores:{ demo:2, cotizacion:2, registro:1, ale2:0 } },
+      { label:'Entre varias personas / mi jefe revisa',
+        meaning:'Influencia parcial. Necesita consenso.',
+        crm:['influencia'],
+        fw:'Pide el siguiente contacto. Deja material.',
+        scores:{ demo:1, cotizacion:1, registro:2, ale2:0 } },
+      { label:'Yo no decido / solo opero',
+        meaning:'Operativo. Conviértelo en aliado interno.',
+        crm:['operativo'],
+        fw:'Deja material. Pídele que te conecte con quien decide.',
+        scores:{ demo:0, cotizacion:0, registro:2, ale2:1 } }
+    ]},
+
+  // FASE 15 — MICRO-CIERRE
+  { type:'script', label:'Fase 15 — Micro-Cierre', timing:'1 min · El diagnóstico abajo determina el camino',
+    color:'var(--green-light)', colorText:'var(--green-dark)',
+    script:'"¿Cómo la ves hasta ahí?"',
+    pause:'⏸ PAUSA — DEJAR HABLAR. El primero que habla después pierde.',
+    script2:'━━ SI HAY INTERÉS → DEMO ━━\n"Si tienes 3–5 minutos te enseño rapidito la página y tú decides si tiene sentido o no."\n\n"Y si eres más a la antigüita, sin problema — nos puedes mandar WhatsApp, correo o llamada y nosotros hacemos todo. La página es herramienta extra, no obligación."\n\n━━ SI HAY DOLOR + APERTURA → COTIZACIÓN ━━\n"¿Qué productos consumen más normalmente? Si gustas te puedo cotizar algunos y así comparas tranquilo."\n\n━━ SI HAY INTERÉS MODERADO → REGISTRO + CORREO ━━\n"¿Me compartes tu correo y te mando el link de registro y la información para que lo tengas a la mano?"\n\n━━ SI HAY RESISTENCIA → ALE 2 ━━\n"No te preocupes, igual te dejo mis datos y cualquier cosa aquí estoy."',
+    note:'REGLAS DE ORO:\n✗ No pelear precio · ✗ No sonar necesitado · ✗ No llenar silencios · ✗ No sobreexplicar\n✓ Pausas · ✓ Calma · ✓ Dejar que el comprador llegue solo a la conclusión\n\nEl diagnóstico abajo te dice cuál de los 4 caminos tomar.' }
+
+];
+
+
+// ── SCORING ENGINE ───────────────────────────────────────────────────
+const FU = {
+  demo:      { label:'Demo de Página', color:'#7F77DD', bg:'#F0EFFE', icon:'🖥️',
+                desc:'Mostrar jaguen.com ahora mismo. Continuar la conversación en la página.',
+                pasos:['Abrir jaguen.com en tu teléfono/laptop','Dejarle buscar un producto que él elija','Mostrar favoritos y pedido rápido','Pedirle el correo al final'] },
+  cotizacion:{ label:'Pedir Productos para Cotizar', color:'#1D9E75', bg:'#E1F5EE', icon:'📋',
+                desc:'El follow-up más valioso. Pedirle lista de 10-15 productos para enviar cotización comparativa.',
+                pasos:['Pedirle la lista ahora: "¿Me mandas 10-15 productos que compres seguido?"','Si no tiene lista: pídele las categorías principales','Comprometerte a cotización en menos de 24 hrs','Registrar en Odoo: fase Cotizado'] },
+  registro:  { label:'Registro + Correo en 1-2 días', color:'#378ADD', bg:'#E6F1FB', icon:'📧',
+                desc:'Interés moderado o poco momentum. Mantener la relación viva con acceso a la plataforma.',
+                pasos:['Pedirle el correo: "¿A qué correo te mando el acceso?"','Mandar correo hoy mismo con link de registro','Follow-up por llamada en 2-3 días (paso 11 — Seguimiento)','Registrar en Odoo: fase Registrado Sin Compras'] },
+  ale2:      { label:'Regresar a Seguimiento — Nurturing Largo', color:'#E8890C', bg:'#FEF3E2', icon:'🤖',
+                desc:'Poco interés o resistencia alta. Regresar al ciclo automatizado de Seguimiento.',
+                pasos:['Salir con elegancia: "Sin problema, aquí estamos cuando lo necesiten"','Registrar en Odoo: fase Seguimiento','Seguimiento retoma el ciclo de 30 días','No insistir — el timing llegará solo'] }
+};
+
+const iwState = {};
+
+// Scoring con pesos acordados
+function iwScore() {
+  const diagBlocks = pitchFlow.filter(b => b.type === 'diag');
+  const scores = { demo:0, cotizacion:0, registro:0, ale2:0 };
+  const crm = [];
+
+  diagBlocks.forEach(b => {
+    const idx = iwState[b.id];
+    if(idx === undefined) return;
+    const opt = b.opts[idx];
+    crm.push(...opt.crm);
+    Object.entries(opt.scores).forEach(([k,v]) => scores[k] += v);
+  });
+
+  // Overrides — dominan sobre el scoring
+  const has = tag => crm.includes(tag);
+
+  // Override 1: timing ahora + decisor → COTIZACIÓN forzada
+  if(has('timing-ahora') && has('decisor')) {
+    return { winner:'cotizacion', scores, crm, override:'Override 1: Timing activo + Decisor = Cotización inmediata' };
+  }
+  // Override 2: dolor alto + apertura alta → COTIZACIÓN forzada
+  const dolorAlto = crm.filter(c => c === 'dolor-alto').length >= 1;
+  const aperturaAlta = crm.filter(c => c === 'apertura-alta').length >= 2;
+  if(dolorAlto && aperturaAlta) {
+    return { winner:'cotizacion', scores, crm, override:'Override 2: Dolor declarado + Apertura alta = Cotización directa' };
+  }
+  // Override 3: resistencia + sin urgencia + operativo → ALE 2 forzada
+  if(has('resistencia-alta') && has('urgencia-baja') && has('operativo')) {
+    return { winner:'ale2', scores, crm, override:'Override 3: Resistencia + Sin timing + Sin poder = Nurturing largo' };
+  }
+
+  // Sin override — gana el de mayor score. Demo nunca gana solo (es complementario)
+  const ranked = Object.entries(scores).sort((a,b) => b[1]-a[1]);
+  let winner = ranked[0][0];
+  // Si demo gana por un punto sobre cotización o registro, lo bajamos
+  if(winner === 'demo') {
+    const second = ranked[1];
+    if(second[1] >= ranked[0][1] - 1) winner = second[0];
+  }
+
+  return { winner, scores, crm, override:null };
+}
+
+function renderInteractivePitch() {
+  let h = '<div class="iw">';
+  h += `<div class="iw-block" style="border-color:var(--green);background:var(--green-light)">
+    <div style="padding:10px 14px;font-size:12px;font-weight:700;color:var(--green-dark)">
+      🎯 OBJETIVO — Generar confianza · Detectar dolor · Clasificar · Determinar follow-up
+      <br><span style="font-size:11px;font-weight:400;opacity:.75">El pitch NO es para cerrar — es para clasificar correctamente. El follow-up correcto hace el cierre.</span>
+    </div>
+  </div>`;
+
+  pitchFlow.forEach((block, bi) => {
+    const isOpen = bi === 0;
+    if(block.type === 'script') {
+      const timingBadge = block.timing
+        ? `<span style="margin-left:auto;font-size:10px;font-weight:600;background:rgba(0,0,0,0.08);padding:1px 8px;border-radius:9px;color:inherit;opacity:.75">${block.timing}</span>`
+        : '';
+      const renderScript = (txt, style) => txt
+        ? `<div class="iw-script" style="margin-top:10px${style?';'+style:''}">${txt.replace(/\n/g,'<br>')}</div>`
+        : '';
+      const renderPause = p => p ? `<div class="iw-pause" style="margin:6px 0">${p}</div>` : '';
+      h += `<div class="iw-block">
+        <div class="iw-block-header" style="background:${block.color};color:${block.colorText};display:flex;align-items:center;gap:6px" onclick="iwToggle(${bi})">
+          <span>📢</span>&nbsp;${block.label}${timingBadge}<span class="iw-chev ${isOpen?'open':''}" id="iwc-${bi}">▾</span>
+        </div>
+        <div class="iw-block-body ${isOpen?'open':''}" id="iwb-${bi}">
+          <div class="iw-script" style="margin-top:0">${block.script.replace(/\n/g,'<br>')}</div>
+          ${renderPause(block.pause)}
+          ${block.script2?`<div class="iw-script" style="margin-top:10px;white-space:pre-line">${block.script2.replace(/\n/g,'<br>')}</div>`:''}
+          ${renderPause(block.pause2)}
+          ${renderScript(block.script3)}
+          ${renderPause(block.pause3)}
+          ${renderScript(block.script4)}
+          ${renderPause(block.pause4)}
+          ${renderScript(block.script5)}
+          ${renderPause(block.pause5)}
+          ${renderScript(block.script6)}
+          ${renderPause(block.pause6)}
+          ${renderScript(block.script7)}
+          ${renderPause(block.pause1b)}
+          ${renderScript(block.script1b)}
+          ${renderPause(block.pause2b)}
+          ${renderScript(block.script2b)}
+          ${renderPause(block.pause3b)}
+          ${renderScript(block.script3b)}
+          ${renderPause(block.pause4b)}
+          ${renderScript(block.script4b)}
+          ${block.note?`<div class="iw-note" style="margin-top:10px">💡 ${block.note.replace(/\n/g,'<br>')}</div>`:''}
+        </div>
+      </div>`;
+    } else {
+      const sel = iwState[block.id];
+      const done = sel !== undefined;
+      h += `<div class="iw-block" style="${done?'border-color:var(--green)':''}">
+        <div class="iw-block-header" style="background:var(--blue-light);color:var(--blue)" onclick="iwToggle(${bi})">
+          <span>🎙️</span>&nbsp;${block.label}
+          ${done?`<span style="margin-left:6px;font-size:10px;background:var(--green);color:white;padding:1px 8px;border-radius:9px;font-weight:700">✓</span>`:''}
+          <span class="iw-chev" id="iwc-${bi}">▾</span>
+        </div>
+        <div class="iw-block-body" id="iwb-${bi}">
+          <div class="iw-q-label">Di esto:</div>
+          <div class="iw-question">${block.script.replace(/\n/g,'<br>')}</div>
+          <div class="iw-q-label" style="margin-top:8px">Respuesta del comprador — selecciona:</div>
+          <div class="iw-opts">`;
+      block.opts.forEach((opt, oi) => {
+        const isSel = sel === oi;
+        h += `<div class="iw-opt ${isSel?'sel':''}" id="iwopt-${block.id}-${oi}" onclick="iwSelect('${block.id}',${oi})">
+          <div class="iw-opt-btn"><div class="iw-opt-dot"></div>${opt.label}</div>
+          <div class="iw-opt-detail">
+            <div class="iw-detail-meaning">${opt.meaning}</div>
+            <div class="iw-crm-pills">${opt.crm.map(c=>`<span class="iw-crm-pill">${c}</span>`).join('')}</div>
+            <div class="iw-detail-fw"><strong>Táctica inmediata:</strong> ${opt.fw}</div>
+          </div>
+        </div>`;
+      });
+      h += `</div></div></div>`;
+    }
+  });
+
+  h += `<div class="iw-result" id="iw-result">
+    <div class="iw-result-title">📊 Diagnóstico Final</div>
+    <div id="iw-result-content"></div>
+    <span class="iw-reset" onclick="iwReset()">↺ Reiniciar diagnóstico</span>
+  </div>`;
+  h += '</div>';
+  return h;
+}
+
+function iwToggle(bi) {
+  const body = document.getElementById('iwb-'+bi);
+  const chev = document.getElementById('iwc-'+bi);
+  if(!body||!chev) return;
+  const open = body.classList.toggle('open');
+  chev.classList.toggle('open', open);
+}
+
+function iwSelect(qid, oi) {
+  iwState[qid] = oi;
+  const block = pitchFlow.find(b => b.id === qid);
+  block.opts.forEach((_, i) => {
+    const el = document.getElementById(`iwopt-${qid}-${i}`);
+    if(el) el.classList.toggle('sel', i === oi);
+  });
+  // Mark block header done
+  pitchFlow.forEach((b, bi) => {
+    if(b.id !== qid) return;
+    const body = document.getElementById('iwb-'+bi);
+    if(!body) return;
+    const hdr = body.previousElementSibling;
+    if(!hdr.querySelector('.iw-done')) {
+      const badge = document.createElement('span');
+      badge.className = 'iw-done';
+      badge.style.cssText = 'margin-left:6px;font-size:10px;background:var(--green);color:white;padding:1px 8px;border-radius:9px;font-weight:700';
+      badge.textContent = '✓';
+      hdr.insertBefore(badge, hdr.querySelector('.iw-chev'));
+    }
+    // Color border
+    hdr.closest('.iw-block').style.borderColor = 'var(--green)';
+  });
+  iwUpdateResult();
+}
+
+function iwUpdateResult() {
+  const diagBlocks = pitchFlow.filter(b => b.type === 'diag');
+  const answered = diagBlocks.filter(b => iwState[b.id] !== undefined).length;
+  if(answered < 3) return;
+
+  const { winner, scores, crm, override } = iwScore();
+  const fu = FU[winner];
+
+  const result = document.getElementById('iw-result');
+  result.classList.add('visible');
+
+  // Score bar
+  const maxScore = Math.max(...Object.values(scores), 1);
+  const scoreBar = Object.entries(scores).map(([k,v]) => {
+    const f = FU[k];
+    const pct = Math.round((v/maxScore)*100);
+    const isWinner = k === winner;
+    return `<div style="margin-bottom:6px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px">
+        <span style="font-size:11px;font-weight:${isWinner?'700':'500'};color:${isWinner?f.color:'var(--text2)'}">${f.icon} ${f.label}${isWinner?' ← RESULTADO':''}</span>
+        <span style="font-size:11px;font-weight:700;color:${f.color}">${v}pts</span>
+      </div>
+      <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden">
+        <div style="height:100%;width:${pct}%;background:${f.color};border-radius:3px;transition:width .4s"></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  const overrideHtml = override
+    ? `<div style="margin-bottom:12px;background:#FAEEDA;border-left:3px solid var(--amber);border-radius:0 6px 6px 0;padding:8px 12px;font-size:11px;color:var(--amber);font-weight:600">⚡ ${override}</div>`
+    : '';
+
+  const pasos = fu.pasos.map((p,i) =>
+    `<div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:6px">
+      <span style="min-width:18px;height:18px;border-radius:50%;background:${fu.color};color:white;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">${i+1}</span>
+      <span style="font-size:12px;color:var(--text);line-height:1.5">${p}</span>
+    </div>`).join('');
+
+  const crmTags = [...new Set(crm)].map(c =>
+    `<span class="iw-metric">${c}</span>`).join('');
+
+  document.getElementById('iw-result-content').innerHTML = `
+    <div style="margin-bottom:14px">${scoreBar}</div>
+    ${overrideHtml}
+    <div style="background:${fu.bg};border:1px solid ${fu.color}33;border-radius:var(--radius);padding:14px;margin-bottom:12px">
+      <div style="font-size:14px;font-weight:700;color:${fu.color};margin-bottom:6px">${fu.icon} Follow-up: ${fu.label}</div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:12px">${fu.desc}</div>
+      <div class="iw-fw-label">Pasos concretos ahora:</div>
+      ${pasos}
+    </div>
+    <div class="iw-fw-label">Perfil CRM registrado</div>
+    <div class="iw-metrics" style="margin-bottom:0">${crmTags}</div>`;
+}
+
+function iwReset() {
+  pitchFlow.filter(b=>b.type==='diag').forEach(b=>{ delete iwState[b.id]; });
+  const pane = document.querySelector('#sb-200 .pane');
+  if(pane) pane.innerHTML = renderInteractivePitch();
+}
+// ── INTERACTIVE CALL SCRIPT ──────────────────────────────────────────
+const callState = {
+  nombreSecretaria: '', nombreComprador: '', nombreCorto: '',
+  correo: '', tipoInteraccion: '', interesCotz: '', metodoCotz: '',
+  tipoCorreo: '', nombreCorreo: '',
+  productos: Array(14).fill(''),
+  bloque: 1
+};
+
+function renderInteractiveCall() {
+  return `<div class="call-wrap">
+
+  <!-- BLOQUE 1 — SECRETARIA -->
+  <div class="call-block" id="cb1">
+    <div class="call-block-header" style="background:var(--green-light);color:var(--green-dark)" onclick="callToggle('cb1')">
+      📞&nbsp; Bloque 1 — Apertura con Secretaria <span class="call-chev open" id="cc1">▾</span>
+    </div>
+    <div class="call-block-body open" id="cbb1">
+      <div class="call-script">"Sí, buen día, habla Javier de Jáguen — ¿con quién hablo, perdón?"</div>
+      <div class="call-pause">⏸ ESCUCHAR</div>
+      <div class="call-input-row">
+        <span class="call-input-label">Nombre Secretaria:</span>
+        <input class="call-input" id="ci-secre" placeholder="Nombre de quien contestó" oninput="callUpdateSecre(this.value)">
+      </div>
+      <div class="call-script">"¿Ah qué tal <span id="cis-secre1">[Nombre]</span>, cómo estás? ¿bien?"</div>
+      <div class="call-pause">⏸ ESPERAR RESPUESTA</div>
+      <div class="call-script">"Oye <span id="cis-secre2">[Nombre]</span>, una pregunta — ¿me podrás decir quién ve lo de compras en la empresa? Las compras de productos de papelería, limpieza y cómputo."</div>
+      <div class="call-pause">⏸ ESCUCHAR</div>
+      <div class="call-input-row">
+        <span class="call-input-label">Nombre Comprador:</span>
+        <input class="call-input" id="ci-comp" placeholder="Nombre del encargado de compras" oninput="callUpdateComp(this.value)">
+      </div>
+      <div class="call-script">"Ah ok perfecto, ¿me podrás comunicar con <span id="cis-comp1">[Nombre Comprador]</span> porfa?"</div>
+      <div class="call-pause">⏸ ESPERAR — Si piden motivo: "Es para enviarle una cotización comparativa, nada más para que tenga otra opción."</div>
+      <div style="margin-top:10px;font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em">¿Qué pasó?</div>
+      <div class="call-options">
+        <div class="call-opt" onclick="callSelectB1('compras')"><div class="call-opt-dot"></div>Me pasaron a compras</div>
+        <div class="call-opt" onclick="callSelectB1('noesta')"><div class="call-opt-dot"></div>No está / no puede atender</div>
+        <div class="call-opt" onclick="callSelectB1('ellos')"><div class="call-opt-dot"></div>Ellos mismos hacen las compras</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NO ESTÁ — script antes de ir a bloque 6 -->
+  <div class="call-block call-hidden" id="cb1b">
+    <div class="call-block-header" style="background:var(--amber-light);color:var(--amber)" onclick="callToggle('cb1b')">
+      💬&nbsp; Compras no está disponible <span class="call-chev" id="cc1b">▾</span>
+    </div>
+    <div class="call-block-body" id="cbb1b">
+      <div class="call-script">"Ok no hay problema. ¿Le podrás comentar que Javier de Jáguen le marcó?"</div>
+      <div class="call-pause">⏸ ESPERAR</div>
+      <div class="call-script">"Última pregunta <span id="cis-secre3">[Nombre]</span> — ¿me podrás pasar su correo para irle adelantando info?"</div>
+      <div class="call-pause">⏸ ESCUCHAR</div>
+      <div class="call-input-row">
+        <span class="call-input-label">Correo:</span>
+        <input class="call-input" id="ci-correo1b" placeholder="correo@empresa.com" oninput="callSave('correo',this.value)">
+      </div>
+      <div style="margin-top:10px;font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em">Tipo de correo obtenido:</div>
+      <div class="call-options">
+        <div class="call-opt" id="noesta-opt-directo" onclick="callNoEstaCorreo('directo')"><div class="call-opt-dot"></div>Correo Comprador (directo)</div>
+        <div class="call-opt" id="noesta-opt-generico" onclick="callNoEstaCorreo('generico')"><div class="call-opt-dot"></div>Correo Genérico</div>
+      </div>
+      <div id="noesta-generico-note" class="call-hidden" style="margin-top:8px">
+        <div class="call-pause">💬 "Ok perfecto, ¿y a nombre de quién lo pongo para que sí le llegue?"</div>
+        <div class="call-input-row">
+          <span class="call-input-label">Nombre para correo:</span>
+          <input class="call-input" id="ci-nombre-correo" placeholder="Nombre del destinatario" oninput="callSave('nombreCorreo',this.value)">
+        </div>
+      </div>
+      <div class="call-options" style="margin-top:8px">
+        <div class="call-opt" onclick="callGoB6('Secretaria')"><div class="call-opt-dot"></div>No dieron correo → Cerrar</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 2 — CON EL COMPRADOR -->
+  <div class="call-block call-hidden" id="cb2">
+    <div class="call-block-header" style="background:var(--blue-light);color:var(--blue)" onclick="callToggle('cb2')">
+      🤝&nbsp; Bloque 2 — Con el Comprador <span class="call-chev" id="cc2">▾</span>
+    </div>
+    <div class="call-block-body" id="cbb2">
+      <div class="call-script" id="cs2a">"¿<span id="cis-comp2">[Nombre]</span>? Ah qué tal, habla Javier de Jáguen. Te marco rápido — nosotros apoyamos a empresas con insumos de oficina, papelería, limpieza y cómputo, y normalmente les ayudamos a bajar costos entre un 5 y 11%."</div>
+      <div id="cs2b" class="call-hidden">
+        <div class="call-script">"Ah, hola buen día, ¿hablo con la persona que se encarga de las compras?"</div>
+        <div class="call-pause">⏸ ESCUCHAR</div>
+        <div class="call-script">"Ah perfecto, ¿con quién tengo el gusto, perdón?"</div>
+        <div class="call-pause">⏸ ESCUCHAR</div>
+        <div class="call-input-row">
+          <span class="call-input-label">Nombre Comprador:</span>
+          <input class="call-input" id="ci-comp2" placeholder="Nombre del comprador" oninput="callUpdateComp(this.value)">
+        </div>
+      </div>
+      <div class="call-pause">⏸ PAUSA</div>
+      <div class="call-script">"¿Me regalas 3 minutos para platicarte rápido y ya decides si tiene sentido?"</div>
+      <div class="call-pause">⏸ ESCUCHAR</div>
+      <div class="call-options">
+        <div class="call-opt" onclick="callShowB3()"><div class="call-opt-dot"></div>Sí acepta los 3 minutos</div>
+        <div class="call-opt" onclick="callNoTime()"><div class="call-opt-dot"></div>No tiene tiempo / prisa</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 3 — MINI PITCH -->
+  <div class="call-block call-hidden" id="cb3">
+    <div class="call-block-header" style="background:rgba(167,139,250,.15);color:var(--purple)" onclick="callToggle('cb3')">
+      🎯&nbsp; Bloque 3 — Mini Pitch <span class="call-chev" id="cc3">▾</span>
+    </div>
+    <div class="call-block-body" id="cbb3">
+      <div class="call-script">"Va, súper rápido — nosotros trabajamos con empresas ayudándoles con los productos de insumos de oficina, sobre todo papelería, limpieza y cómputo. La mayoría de nuestros clientes ya tenían proveedor, pero llegan con nosotros porque les fallan en surtido, en los tiempos de entrega o porque nomás no los atienden bien."</div>
+      <div class="call-pause">⏸ PAUSA</div>
+      <div class="call-script">"Por cierto, ¿quién es tu proveedor de papelería ahorita?"</div>
+      <div class="call-pause">⏸ ESCUCHAR — no necesitas guardar la respuesta</div>
+      <div class="call-script">"Ok adelante, pues mira, para nosotros el nombre del juego es servicio y atención en todo. Pedidos completos al 100%, entregas al día siguiente y tenemos página que sirve como catálogo de las 11 líneas que manejamos — ahí tendrás tus precios especiales y podrás hacer cotizaciones y pedidos."</div>
+      <div class="call-pause">⏸ PAUSA</div>
+      <div class="call-script">"¿Cómo la ves?"</div>
+      <div class="call-pause">⏸ ESCUCHAR</div>
+      <div class="call-script">"Perfecto, lo que podemos hacer es muy simple: tomamos los mismos productos que compran en estos momentos y les armamos una comparativa — normalmente logran en promedio 7% de ahorro sin cambiar nada de golpe."</div>
+      <div class="call-pause">⏸ PAUSA</div>
+      <div class="call-script">"¿Te interesaría que te cotizara algunos productos para que compares?"</div>
+      <div class="call-pause">⏸ ESCUCHAR</div>
+      <div class="call-options">
+        <div class="call-opt" onclick="callShowB4()"><div class="call-opt-dot"></div>Sí quiere cotización</div>
+        <div class="call-opt" onclick="callNoPitch()"><div class="call-opt-dot"></div>No le interesa</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 4 — OPCIÓN COTIZACIÓN -->
+  <div class="call-block call-hidden" id="cb4">
+    <div class="call-block-header" style="background:var(--green-light);color:var(--green-dark)" onclick="callToggle('cb4')">
+      📋&nbsp; Bloque 4 — ¿Cómo cotizamos? <span class="call-chev" id="cc4">▾</span>
+    </div>
+    <div class="call-block-body" id="cbb4">
+      <div class="call-script">"Si quieres <span id="cis-comp4">[Nombre]</span>, lo hacemos muy fácil — me puedes decir los 10-15 productos que más compran y te armo una cotización comparativa, o si prefieres, te puedes registrar en nuestra página y armas un carrito con lo que ya compras y sobre eso lo revisamos. ¿Qué opción se te facilita más?"</div>
+      <div class="call-pause">⏸ ESCUCHAR</div>
+      <div class="call-options">
+        <div class="call-opt" onclick="callSelectMetodo('productos')"><div class="call-opt-dot"></div>Productos para cotizar</div>
+        <div class="call-opt" onclick="callSelectMetodo('pagina')"><div class="call-opt-dot"></div>Página jaguen.com</div>
+      </div>
+      <!-- Productos -->
+      <div class="call-hidden" id="cb4-productos">
+        <div style="margin:10px 0 6px;font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase">Anota los productos:</div>
+        <div class="call-products">
+          ${Array.from({length:14},(_,i)=>`<input class="call-product-input" placeholder="Producto ${i+1}" oninput="callSaveProd(${i},this.value)">`).join('')}
+        </div>
+        <div class="call-options" style="margin-top:10px">
+          <div class="call-opt" onclick="callGoB6('Comprador')"><div class="call-opt-dot"></div>Listo, ir al cierre</div>
+        </div>
+      </div>
+      <!-- Página -->
+      <div class="call-hidden" id="cb4-pagina">
+        <div class="call-options" style="margin-top:10px">
+          <div class="call-opt" onclick="callShowB5()"><div class="call-opt-dot"></div>Sí, explicar la página</div>
+          <div class="call-opt" onclick="callGoB6('Comprador')"><div class="call-opt-dot"></div>No tiene tiempo → Cierre</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 5 — PÁGINA -->
+  <div class="call-block call-hidden" id="cb5">
+    <div class="call-block-header" style="background:var(--green-light);color:var(--green-dark)" onclick="callToggle('cb5')">
+      🌐&nbsp; Bloque 5 — Página jaguen.com <span class="call-chev" id="cc5">▾</span>
+    </div>
+    <div class="call-block-body" id="cbb5">
+      <div class="call-script">"Ok, entra a la página, es www.jaguen.com. Ahí hasta arriba viene lo de Regístrate, necesitas la Constancia de Situación Fiscal, no te quita ni 3 minutos hacerlo.\n\nLos precios que ves ahorita en la página son precio al público e incluyen IVA. Pero una vez que te registras y te damos de alta, cuando hagas login verás tus precios especiales ya ajustados."</div>
+      <div class="call-pause">⏸ ESPERAR</div>
+      <div class="call-script">"Si quieres pásame tu correo, te voy mandando la info y cuando tengas tiempo haces el registro con calma, ¿va?"</div>
+      <div class="call-pause">⏸ ESCUCHAR</div>
+      <div class="call-input-row">
+        <span class="call-input-label">Correo:</span>
+        <input class="call-input" id="ci-correo5" placeholder="correo@empresa.com" oninput="callSave('correo',this.value)">
+      </div>
+      <div class="call-options">
+        <div class="call-opt" onclick="callGoB6('Comprador')"><div class="call-opt-dot"></div>Ir al cierre</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 6 — CIERRE -->
+  <div class="call-block call-hidden" id="cb6">
+    <div class="call-block-header" style="background:var(--green-light);color:var(--green-dark)" onclick="callToggle('cb6')">
+      ✅&nbsp; Bloque 6 — Cierre <span class="call-chev" id="cc6">▾</span>
+    </div>
+    <div class="call-block-body" id="cbb6">
+      <div class="call-input-row">
+        <span class="call-input-label">Correo:</span>
+        <input class="call-input" id="ci-correo6" placeholder="correo@empresa.com" oninput="callSave('correo',this.value)">
+      </div>
+      <div class="call-script">"Perfecto, le mando un correo y si hace sentido lo vemos rápido, ¿va?"</div>
+      <div class="call-pause">⏸ ESPERAR RESPUESTA Y CERRAR</div>
+      <div style="margin-top:12px">
+        <button class="call-copy-btn" onclick="callShowSummary()">📋 Ver Resumen para Odoo</button>
+        <span class="call-reset" onclick="callReset()">↺ Reiniciar</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESUMEN PARA ODOO -->
+  <div class="call-summary" id="call-summary">
+    <div class="call-summary-title">📊 Resumen — Copiar a Odoo</div>
+    <div class="call-summary-row"><span class="call-summary-key">Tipo Interacción:</span><span class="call-summary-val" id="cs-tipo"></span></div>
+    <div class="call-summary-row"><span class="call-summary-key">Nombre Secretaria:</span><span class="call-summary-val" id="cs-secre"></span></div>
+    <div class="call-summary-row"><span class="call-summary-key">Nombre Comprador:</span><span class="call-summary-val" id="cs-comp"></span></div>
+    <div class="call-summary-row"><span class="call-summary-key">Nombre Corto:</span><span class="call-summary-val" id="cs-corto"></span></div>
+    <div class="call-summary-row"><span class="call-summary-key">Correo:</span><span class="call-summary-val" id="cs-correo"></span></div>
+    <div class="call-summary-row"><span class="call-summary-key">Tipo Correo:</span><span class="call-summary-val" id="cs-tipo-correo"></span></div>
+    <div class="call-summary-row"><span class="call-summary-key">Interés Cotización:</span><span class="call-summary-val" id="cs-interes"></span></div>
+    <div class="call-summary-row"><span class="call-summary-key">Método Cotización:</span><span class="call-summary-val" id="cs-metodo"></span></div>
+    <div id="cs-productos-wrap" style="display:none">
+      <div class="call-summary-row"><span class="call-summary-key">Productos:</span><span class="call-summary-val" id="cs-productos"></span></div>
+    </div>
+    <span class="call-reset" onclick="callReset()">↺ Nueva llamada</span>
+  </div>
+
+</div>`;
+}
+
+function callToggle(id) {
+  // Handle both old IDs (cb1 → cbb1) and new prefixed IDs (5-fb1 → 5-cbbfb1)
+  let bodyId, chevId;
+  if(id.includes('-fb')) {
+    // New format: "s5-fb1" → body="s5-cbbfb1", chev="s5-ccfb1"
+    const dash = id.indexOf('-');
+    const prefix = id.slice(0, dash);
+    const rest = id.slice(dash+1); // "fb1"
+    bodyId = prefix + '-cbb' + rest;
+    chevId = prefix + '-cc' + rest;
+  } else if(id.startsWith('cb')) {
+    // Old format: "cb1" → body="cbb1", chev="cc1"  
+    bodyId = 'cbb' + id.slice(2);
+    chevId = 'cc' + id.slice(2);
+  } else {
+    bodyId = 'cbb' + id;
+    chevId = 'cc' + id;
+  }
+  const body = document.getElementById(bodyId);
+  const chev = document.getElementById(chevId);
+  if(!body||!chev) return;
+  const open = body.classList.toggle('open');
+  chev.classList.toggle('open', open);
+}
+
+function callSave(key, val) { callState[key] = val; }
+
+function callUpdateSecre(val) {
+  callState.nombreSecretaria = val;
+  const display = val.trim() || '[Nombre]';
+  document.querySelectorAll('[id$="-cis-secre1"],[id$="-cis-secre2"],[id$="-cis-secre3"],[id$="-fis-secre1"],[id$="-fis-secre2"],[id$="-fis-secre3"],[id$="-fis-secre4"],[id$="-fis-secre5"]').forEach(el => el.textContent = display);
+  // Also update non-prefixed (LL1)
+  ['cis-secre1','cis-secre2','cis-secre3'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent = display; });
+}
+
+function callUpdateComp(val) {
+  callState.nombreComprador = val;
+  // Extract first name: skip titles (Ing, Lic, Dr, Sr, Sra, Arq, Mtro)
+  const titles = ['ing','lic','dr','sr','sra','ing.','lic.','dr.','sr.','sra.','arq','arq.','mtro','mtro.'];
+  const parts = val.trim().split(/\s+/);
+  let firstName = '';
+  for(const p of parts) {
+    if(!titles.includes(p.toLowerCase())) { firstName = p; break; }
+  }
+  callState.nombreCorto = firstName || parts[0] || '';
+  // Update all instances across all steps
+  document.querySelectorAll('[id$="-cis-comp1"]').forEach(el => el.textContent = val.trim() || '[Nombre Comprador]');
+  document.querySelectorAll('[id$="-cis-comp2"],[id$="-cis-comp3"],[id$="-cis-comp4"],[id$="-cis-comp5"],[id$="-cis-comp6"]').forEach(el => el.textContent = callState.nombreCorto || '[Nombre]');
+  // Also update fis- spans in followUp scripts
+  document.querySelectorAll('[id$="-fis-comp1"],[id$="-fis-comp2"],[id$="-fis-comp3"],[id$="-fis-comp4"]').forEach(el => el.textContent = val.trim() || '[Nombre Comprador]');
+  document.querySelectorAll('[id$="-fis-comp5"],[id$="-fis-comp6"]').forEach(el => el.textContent = callState.nombreCorto || '[Nombre]');
+  document.querySelectorAll('.cis-comprador-corto').forEach(el => el.textContent = callState.nombreCorto || '[Nombre]');
+}
+
+
+
+function callSaveProd(idx, val) { callState.productos[idx] = val; }
+
+function callSelectB1(opt) {
+  // Mark selected
+  document.querySelectorAll('#cbb1 .call-opt').forEach(el => el.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+
+  // Hide and collapse ALL dependent blocks first
+  ['cb1b','cb2','cb3','cb4','cb5','cb6'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) {
+      el.classList.add('call-hidden');
+      const body = document.getElementById('cbb' + id.slice(2));
+      const chev = document.getElementById('cc' + id.slice(2));
+      if(body) body.classList.remove('open');
+      if(chev) chev.classList.remove('open');
+    }
+  });
+  // Hide summary too
+  const summary = document.getElementById('call-summary');
+  if(summary) summary.classList.remove('visible');
+
+  if(opt === 'compras' || opt === 'ellos') {
+    callState.tipoInteraccion = 'Comprador';
+    const cb2 = document.getElementById('cb2');
+    cb2.classList.remove('call-hidden');
+    const body2 = document.getElementById('cbb2');
+    body2.classList.add('open');
+    document.getElementById('cc2').classList.add('open');
+    if(!callState.nombreComprador) {
+      document.getElementById('cs2a').classList.add('call-hidden');
+      document.getElementById('cs2b').classList.remove('call-hidden');
+    } else {
+      document.getElementById('cs2a').classList.remove('call-hidden');
+      document.getElementById('cs2b').classList.add('call-hidden');
+    }
+    cb2.scrollIntoView({behavior:'smooth', block:'start'});
+  } else {
+    callState.tipoInteraccion = 'Secretaria';
+    const cb1b = document.getElementById('cb1b');
+    cb1b.classList.remove('call-hidden');
+    const body1b = document.getElementById('cbb1b');
+    body1b.classList.add('open');
+    document.getElementById('cc1b').classList.add('open');
+    cb1b.scrollIntoView({behavior:'smooth', block:'start'});
+  }
+}
+
+function callShowB3() {
+  document.querySelectorAll('#cbb2 .call-opt').forEach(el => el.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+  callState.interesCotz = 'Si';
+  // Hide downstream blocks
+  ['cb4','cb5','cb6'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) { el.classList.add('call-hidden'); const b=document.getElementById('cbb'+id.slice(2)); if(b) b.classList.remove('open'); }
+  });
+  document.getElementById('call-summary').classList.remove('visible');
+  const cb3 = document.getElementById('cb3');
+  cb3.classList.remove('call-hidden');
+  const body3 = document.getElementById('cbb3');
+  body3.classList.add('open');
+  document.getElementById('cc3').classList.add('open');
+  cb3.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function callNoTime() {
+  document.querySelectorAll('#cbb2 .call-opt').forEach(el => el.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+  callState.interesCotz = 'No';
+  // Hide downstream blocks
+  ['cb3','cb4','cb5'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) { el.classList.add('call-hidden'); const b=document.getElementById('cbb'+id.slice(2)); if(b) b.classList.remove('open'); }
+  });
+  callGoB6('Comprador');
+}
+
+function callShowB4() {
+  document.querySelectorAll('#cbb3 .call-opt').forEach(el => el.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+  callState.interesCotz = 'Si';
+  ['cb5','cb6'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) { el.classList.add('call-hidden'); const b=document.getElementById('cbb'+id.slice(2)); if(b) b.classList.remove('open'); }
+  });
+  document.getElementById('call-summary').classList.remove('visible');
+  const cb4 = document.getElementById('cb4');
+  cb4.classList.remove('call-hidden');
+  const body4 = document.getElementById('cbb4');
+  body4.classList.add('open');
+  document.getElementById('cc4').classList.add('open');
+  cb4.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function callNoPitch() {
+  document.querySelectorAll('#cbb3 .call-opt').forEach(el => el.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+  callState.interesCotz = 'No';
+  ['cb4','cb5'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) { el.classList.add('call-hidden'); const b=document.getElementById('cbb'+id.slice(2)); if(b) b.classList.remove('open'); }
+  });
+  callGoB6('Comprador');
+}
+
+function callSelectMetodo(opt) {
+  document.querySelectorAll('#cbb4 > .call-options .call-opt').forEach(el => el.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+  callState.metodoCotz = opt === 'productos' ? 'Cotizacion' : 'Pagina';
+  document.getElementById('cb4-productos').classList.add('call-hidden');
+  document.getElementById('cb4-pagina').classList.add('call-hidden');
+  if(opt === 'productos') {
+    document.getElementById('cb4-productos').classList.remove('call-hidden');
+  } else {
+    document.getElementById('cb4-pagina').classList.remove('call-hidden');
+  }
+}
+
+function callShowB5() {
+  const cb5 = document.getElementById('cb5');
+  cb5.classList.remove('call-hidden');
+  const body5 = document.getElementById('cbb5');
+  body5.classList.add('open');
+  document.getElementById('cc5').classList.add('open');
+  cb5.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function callNoEstaCorreo(tipo) {
+  // Mutually exclusive selection
+  document.getElementById('noesta-opt-directo').classList.remove('selected');
+  document.getElementById('noesta-opt-generico').classList.remove('selected');
+  event.currentTarget.classList.add('selected');
+  callState.tipoCorreo = tipo;
+  const note = document.getElementById('noesta-generico-note');
+  if(tipo === 'generico') {
+    note.classList.remove('call-hidden');
+  } else {
+    note.classList.add('call-hidden');
+  }
+  callGoB6('Secretaria');
+}
+
+function callGoB6(tipo) {
+  if(tipo) callState.tipoInteraccion = tipo;
+  document.querySelectorAll('.call-opt').forEach(el => {
+    if(el === event.currentTarget) el.classList.add('selected');
+  });
+  const cb6 = document.getElementById('cb6');
+  cb6.classList.remove('call-hidden');
+  const body6 = document.getElementById('cbb6');
+  body6.classList.add('open');
+  document.getElementById('cc6').classList.add('open');
+  // Pre-fill correo in bloque 6
+  if(callState.correo) {
+    const c6 = document.getElementById('ci-correo6');
+    if(c6) c6.value = callState.correo;
+  }
+  cb6.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function callShowSummary(pIn) {
+  const p = pIn || '0';
+  const wrap = document.getElementById(`${p}-call-summary`) || document.getElementById('call-summary');
+  if(!wrap) return;
+  const c6 = document.getElementById(`${p}-fi-correo5`) || document.getElementById('ci-correo6');
+  if(c6 && c6.value) callState.correo = c6.value;
+  const set = (id, val) => { const el = wrap.querySelector(`#${id}`); if(el) el.textContent = val; };
+  set('cs-tipo', callState.tipoInteraccion || '—');
+  set('cs-secre', callState.nombreSecretaria || '—');
+  set('cs-comp', callState.nombreComprador || '—');
+  set('cs-corto', callState.nombreCorto || '—');
+  set('cs-correo', callState.correo || '—');
+  set('cs-tipo-correo', callState.tipoCorreo === 'directo' ? 'Comprador (directo)' : callState.tipoCorreo === 'generico' ? 'Genérico' : '—');
+  set('cs-interes', callState.interesCotz || '—');
+  set('cs-metodo', callState.metodoCotz || '—');
+  const prods = callState.productos.filter(p => p.trim());
+  if(prods.length > 0) {
+    const pw = wrap.querySelector('#cs-productos-wrap');
+    const pv = wrap.querySelector('#cs-productos');
+    if(pw) pw.style.display = 'flex';
+    if(pv) pv.textContent = prods.join(' / ');
+  }
+  wrap.classList.add('visible');
+  wrap.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+
+// ── INTERACTIVE FOLLOW-UP SCRIPT v2 ─────────────────────────────────
+// Simple approach: fixed IDs, only one step open at a time via DOM traversal
+
+function getFU(el, id) {
+  // Find element by class within the same call-wrap ancestor
+  const wrap = el.closest ? el.closest('.fu-wrap') : null;
+  return wrap ? wrap.querySelector('.' + id) : document.querySelector('.' + id);
+}
+
+function renderInteractiveFollowUp(sid) {
+  const secre = callState.nombreSecretaria || '';
+  const comp = callState.nombreComprador || '';
+  const corto = callState.nombreCorto || '';
+  const intentos = callState.intentos || 0;
+  const tiempoPrev = intentos >= 3 ? 'por varias semanas' : 'desde la semana pasada';
+  const correo = callState.correo || '';
+  const tipoCorreo = callState.tipoCorreo || '';
+
+  return `<div class="call-wrap fu-wrap">
+
+  <!-- DATOS ACTUALES -->
+  <div class="call-block">
+    <div class="call-block-header" style="background:var(--bg);color:var(--text2);border-bottom:1px solid var(--border)" onclick="fuToggle(this)">
+      📋&nbsp; Información que tenemos <span class="call-chev open">▾</span>
+    </div>
+    <div class="call-block-body open">
+      <div class="call-input-row">
+        <span class="call-input-label">Nombre Secretaria:</span>
+        <input class="call-input fu-secre-input" placeholder="Si lo tenemos" value="${secre}" oninput="fuUpdateSecre(this)">
+      </div>
+      <div class="call-input-row">
+        <span class="call-input-label">Nombre Comprador:</span>
+        <input class="call-input fu-comp-input" placeholder="Si lo tenemos" value="${comp}" oninput="fuUpdateComp(this)">
+      </div>
+      <div class="call-input-row">
+        <span class="call-input-label">Correo:</span>
+        <input class="call-input fu-correo-input" placeholder="Si lo tenemos" value="${correo}" oninput="callSave('correo',this.value)">
+      </div>
+      <div class="call-input-row">
+        <span class="call-input-label">Intentos anteriores:</span>
+        <input class="call-input" style="max-width:80px" placeholder="0" value="${intentos}" type="number" min="0" oninput="fuUpdateIntentos(this)">
+      </div>
+      <div class="call-note">Texto ajustado: "<span class="fu-tiempo">${tiempoPrev}</span>"</div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 1 — SECRETARIA -->
+  <div class="call-block">
+    <div class="call-block-header" style="background:var(--green-light);color:var(--green-dark)" onclick="fuToggle(this)">
+      📞&nbsp; Bloque 1 — Con la Secretaria <span class="call-chev open">▾</span>
+    </div>
+    <div class="call-block-body open fu-b1-body">
+      <div class="fu-escenario-a ${secre ? '' : 'call-hidden'}">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--text3);margin-bottom:6px">A — Tenemos nombre secretaria</div>
+        <div class="call-script">"Sí, buenos días, habla Javier de Jáguen, ¿<span class="fu-secre-name">${secre || '[Nombre Secretaria]'}</span>?"</div>
+        <div class="call-pause">⏸ ESPERAR RESPUESTA</div>
+        <div class="call-script">"Ah, hola, ¿cómo estás? ¿bien?"</div>
+        <div class="call-pause">⏸ ESPERAR RESPUESTA</div>
+      </div>
+      <div class="fu-escenario-b ${secre ? 'call-hidden' : ''}">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--text3);margin-bottom:6px">B — Sin nombre secretaria</div>
+        <div class="call-script">"Sí, buenos días, habla Javier de Jáguen, ¿con quién hablo, perdón?"</div>
+        <div class="call-pause">⏸ ESPERAR RESPUESTA</div>
+        <div class="call-input-row">
+          <span class="call-input-label">Nombre Secretaria:</span>
+          <input class="call-input fu-secre-input2" placeholder="Anotar si nos lo dicen" oninput="fuUpdateSecre(this)">
+        </div>
+        <div class="call-script">"Ah, hola, ¿cómo estás? ¿bien?"</div>
+        <div class="call-pause">⏸ ESPERAR RESPUESTA</div>
+      </div>
+      <div class="fu-con-comp ${comp ? '' : 'call-hidden'}">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--text3);margin-bottom:6px">Tenemos nombre comprador</div>
+        <div class="call-script">"Habla Javier de Jáguen. Oye <span class="fu-secre-name2">${secre || '[Nombre]'}</span>, ¿me podrás comunicar con <span class="fu-comp-full">${comp || '[Nombre Comprador]'}</span> porfa? Es que le he estado marcando y enviando correos <span class="fu-tiempo2">${tiempoPrev}</span> sobre algo que puede ahorrarle en sus compras y quiero saber qué le pareció."</div>
+      </div>
+      <div class="fu-sin-comp ${comp ? 'call-hidden' : ''}">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--text3);margin-bottom:6px">Sin nombre comprador</div>
+        <div class="call-script">"Habla Javier de Jáguen. Oye <span class="fu-secre-name3">${secre || '[Nombre]'}</span>, ¿me podrás decir quién se encarga de las compras en la empresa?"</div>
+        <div class="call-pause">⏸ ESPERAR RESPUESTA</div>
+        <div class="call-input-row">
+          <span class="call-input-label">Nombre Comprador:</span>
+          <input class="call-input fu-comp-input2" placeholder="Anotar si nos lo dicen" oninput="fuUpdateComp(this)">
+        </div>
+        <div class="call-script">"Es que le he estado marcando y enviando correos <span class="fu-tiempo3">${tiempoPrev}</span> sobre algo que puede ahorrarle en sus compras y quiero saber qué le pareció."</div>
+      </div>
+      <div class="call-pause">⏸ ESPERAR RESPUESTA</div>
+      <div class="call-script">"¿Me podrás comunicar con <span class="fu-comp-full2">${comp || '[Nombre Comprador]'}</span> porfa?"</div>
+      <div class="call-pause">⏸ ESPERAR RESPUESTA</div>
+      <div style="margin-top:10px;font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em">¿Qué pasó?</div>
+      <div class="call-options">
+        <div class="call-opt" onclick="fuB1Select(this,'compras')"><div class="call-opt-dot"></div>Me pasaron a compras</div>
+        <div class="call-opt" onclick="fuB1Select(this,'noesta')"><div class="call-opt-dot"></div>No está / no puede atender</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NO ESTÁ -->
+  <div class="call-block call-hidden fu-noesta">
+    <div class="call-block-header" style="background:var(--amber-light);color:var(--amber)" onclick="fuToggle(this)">
+      💬&nbsp; Compras no está disponible <span class="call-chev">▾</span>
+    </div>
+    <div class="call-block-body">
+      <div class="call-script">"Ok no hay problema. ¿Le podrás comentar que Javier de Jáguen le marcó?"</div>
+      <div class="call-pause">⏸ ESPERAR</div>
+      <div class="${(correo && tipoCorreo === 'directo') ? '' : 'call-hidden'} fu-ya-correo-directo">
+        <div class="call-script">"Solo para confirmar — ¿el correo de <span class="fu-comp-corto">${corto || '[Nombre]'}</span> sigue siendo <span class="fu-correo-actual">${correo}</span>?"</div>
+        <div class="call-pause">⏸ ESCUCHAR</div>
+        <div class="call-input-row">
+          <span class="call-input-label">Correo confirmado:</span>
+          <input class="call-input fu-correo-conf" placeholder="correo@empresa.com" value="${correo}" oninput="callSave('correo',this.value)">
+        </div>
+      </div>
+      <div class="${(correo && tipoCorreo === 'directo') ? 'call-hidden' : ''} fu-pedir-correo">
+        <div class="call-script">"Última pregunta <span class="fu-secre-name4">${secre || '[Nombre]'}</span> — ¿me podrás pasar el correo directo de <span class="fu-comp-corto2">${corto || 'quien ve compras'}</span>?"</div>
+        <div class="call-pause">⏸ ESCUCHAR</div>
+        <div class="call-input-row">
+          <span class="call-input-label">Correo:</span>
+          <input class="call-input fu-correo-nuevo" placeholder="correo@empresa.com" oninput="callSave('correo',this.value)">
+        </div>
+      </div>
+      <div class="call-options" style="margin-top:8px">
+        <div class="call-opt" onclick="fuNoEstaCorreo(this,'directo')"><div class="call-opt-dot"></div>Correo Comprador (directo)</div>
+        <div class="call-opt" onclick="fuNoEstaCorreo(this,'generico')"><div class="call-opt-dot"></div>Correo Genérico</div>
+        <div class="call-opt" onclick="fuGoB6(this,'Secretaria')"><div class="call-opt-dot"></div>No dieron correo → Cerrar</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 2 — COMPRADOR -->
+  <div class="call-block call-hidden fu-b2">
+    <div class="call-block-header" style="background:var(--blue-light);color:var(--blue)" onclick="fuToggle(this)">
+      🤝&nbsp; Bloque 2 — Con el Comprador <span class="call-chev">▾</span>
+    </div>
+    <div class="call-block-body">
+      <div class="${corto ? '' : 'call-hidden'} fu-b2-con-nombre">
+        <div class="call-script">"¿<span class="fu-comp-corto3">${corto || '[Nombre]'}</span>? Ah qué tal, habla Javier de Jáguen. Te marco rápido — nosotros apoyamos a empresas con insumos de oficina, papelería, limpieza y cómputo, y normalmente les ayudamos a bajar costos entre un 5 y 11%."</div>
+      </div>
+      <div class="${corto ? 'call-hidden' : ''} fu-b2-sin-nombre">
+        <div class="call-script">"Ah, hola buen día, ¿hablo con la persona que se encarga de las compras?"</div>
+        <div class="call-pause">⏸ ESCUCHAR</div>
+        <div class="call-script">"Ah perfecto, ¿con quién tengo el gusto, perdón?"</div>
+        <div class="call-pause">⏸ ESCUCHAR</div>
+        <div class="call-input-row">
+          <span class="call-input-label">Nombre Comprador:</span>
+          <input class="call-input fu-comp-input3" placeholder="Nombre del comprador" oninput="fuUpdateComp(this)">
+        </div>
+        <div class="call-script">"Ah qué tal, habla Javier de Jáguen. Te marco rápido — nosotros apoyamos a empresas con insumos de oficina, papelería, limpieza y cómputo, y normalmente les ayudamos a bajar costos entre un 5 y 11%."</div>
+      </div>
+      <div class="call-pause">⏸ PAUSA</div>
+      <div class="call-script">"¿Me regalas 3 minutos para platicarte rápido y ya decides si tiene sentido?"</div>
+      <div class="call-pause">⏸ ESCUCHAR</div>
+      <div class="call-options">
+        <div class="call-opt" onclick="fuShowB3(this)"><div class="call-opt-dot"></div>Sí acepta los 3 minutos</div>
+        <div class="call-opt" onclick="fuNoTime(this)"><div class="call-opt-dot"></div>No tiene tiempo / prisa</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 3 — MINI PITCH -->
+  <div class="call-block call-hidden fu-b3">
+    <div class="call-block-header" style="background:rgba(167,139,250,.15);color:var(--purple)" onclick="fuToggle(this)">
+      🎯&nbsp; Bloque 3 — Mini Pitch <span class="call-chev">▾</span>
+    </div>
+    <div class="call-block-body">
+      <div class="call-script">"Va, súper rápido — nosotros trabajamos con empresas ayudándoles con los productos de insumos de oficina, sobre todo papelería, limpieza y cómputo. La mayoría de nuestros clientes ya tenían proveedor, pero llegan con nosotros porque les fallan en surtido, en los tiempos de entrega o porque nomás no los atienden bien."</div>
+      <div class="call-pause">⏸ PAUSA</div>
+      <div class="call-script">"Por cierto, ¿quién es tu proveedor de papelería ahorita?"</div>
+      <div class="call-pause">⏸ ESCUCHAR</div>
+      <div class="call-script">"Ok adelante, pues mira, para nosotros el nombre del juego es servicio y atención en todo. Pedidos completos al 100%, entregas al día siguiente y tenemos página que sirve como catálogo de las 11 líneas que manejamos."</div>
+      <div class="call-pause">⏸ PAUSA</div>
+      <div class="call-script">"¿Cómo la ves?"</div>
+      <div class="call-pause">⏸ ESCUCHAR</div>
+      <div class="call-script">"Perfecto, lo que podemos hacer es muy simple: tomamos los mismos productos que compran y les armamos una comparativa — normalmente logran en promedio 7% de ahorro sin cambiar nada de golpe."</div>
+      <div class="call-pause">⏸ PAUSA</div>
+      <div class="call-script">"¿Te interesaría que te cotizara algunos productos para que compares?"</div>
+      <div class="call-pause">⏸ ESCUCHAR</div>
+      <div class="call-options">
+        <div class="call-opt" onclick="fuShowB4(this)"><div class="call-opt-dot"></div>Sí quiere cotización</div>
+        <div class="call-opt" onclick="fuNoPitch(this)"><div class="call-opt-dot"></div>No le interesa</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 4 — COTIZACIÓN -->
+  <div class="call-block call-hidden fu-b4">
+    <div class="call-block-header" style="background:var(--green-light);color:var(--green-dark)" onclick="fuToggle(this)">
+      📋&nbsp; Bloque 4 — ¿Cómo cotizamos? <span class="call-chev">▾</span>
+    </div>
+    <div class="call-block-body">
+      <div class="call-script">"Si quieres <span class="fu-comp-corto4">${corto || '[Nombre]'}</span>, lo hacemos muy fácil — me puedes decir los 10-15 productos que más compran y te armo una cotización, o te registras en nuestra página. ¿Qué opción se te facilita más?"</div>
+      <div class="call-pause">⏸ ESCUCHAR</div>
+      <div class="call-options">
+        <div class="call-opt" onclick="fuMetodo(this,'productos')"><div class="call-opt-dot"></div>Productos para cotizar</div>
+        <div class="call-opt" onclick="fuMetodo(this,'pagina')"><div class="call-opt-dot"></div>Página jaguen.com</div>
+      </div>
+      <div class="call-hidden fu-productos">
+        <div style="margin:10px 0 6px;font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase">Anota los productos:</div>
+        <div class="call-products">${Array.from({length:14},(_,i)=>`<input class="call-product-input" placeholder="Producto ${i+1}" oninput="callSaveProd(${i},this.value)">`).join('')}</div>
+        <div class="call-options" style="margin-top:10px">
+          <div class="call-opt" onclick="fuGoB6(this,'Comprador')"><div class="call-opt-dot"></div>Listo, ir al cierre</div>
+        </div>
+      </div>
+      <div class="call-hidden fu-pagina">
+        <div class="call-options" style="margin-top:10px">
+          <div class="call-opt" onclick="fuShowB5(this)"><div class="call-opt-dot"></div>Sí, explicar la página</div>
+          <div class="call-opt" onclick="fuGoB6(this,'Comprador')"><div class="call-opt-dot"></div>No tiene tiempo → Cierre</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 5 — PÁGINA -->
+  <div class="call-block call-hidden fu-b5">
+    <div class="call-block-header" style="background:var(--green-light);color:var(--green-dark)" onclick="fuToggle(this)">
+      🌐&nbsp; Bloque 5 — Página jaguen.com <span class="call-chev">▾</span>
+    </div>
+    <div class="call-block-body">
+      <div class="call-script">"Ok, entra a www.jaguen.com. Ahí hasta arriba viene Regístrate, solo necesitas la Constancia de Situación Fiscal.\n\nLos precios que ves ahorita son precio al público con IVA. Una vez que te registras y te damos de alta, cuando hagas login verás tus precios especiales."</div>
+      <div class="call-pause">⏸ ESPERAR</div>
+      <div class="call-script">"Si quieres pásame tu correo, te mando la info y cuando tengas tiempo haces el registro, ¿va?"</div>
+      <div class="call-pause">⏸ ESCUCHAR</div>
+      <div class="call-input-row">
+        <span class="call-input-label">Correo:</span>
+        <input class="call-input fu-correo-b5" placeholder="correo@empresa.com" oninput="callSave('correo',this.value)">
+      </div>
+      <div class="call-options">
+        <div class="call-opt" onclick="fuGoB6(this,'Comprador')"><div class="call-opt-dot"></div>Ir al cierre</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 6 — CIERRE -->
+  <div class="call-block call-hidden fu-b6">
+    <div class="call-block-header" style="background:var(--green-light);color:var(--green-dark)" onclick="fuToggle(this)">
+      ✅&nbsp; Bloque 6 — Cierre <span class="call-chev">▾</span>
+    </div>
+    <div class="call-block-body">
+      <div class="call-input-row">
+        <span class="call-input-label">Correo:</span>
+        <input class="call-input fu-correo-b6" placeholder="correo@empresa.com" oninput="callSave('correo',this.value)">
+      </div>
+      <div class="call-script">"Perfecto, le mando un correo y si hace sentido lo vemos rápido, ¿va?"</div>
+      <div class="call-pause">⏸ ESPERAR RESPUESTA Y CERRAR</div>
+      <div style="margin-top:12px">
+        <button class="call-copy-btn" onclick="fuShowSummary(this)">📋 Ver Resumen para Odoo</button>
+        <span class="call-reset" onclick="fuReset(this)">↺ Reiniciar</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESUMEN -->
+  <div class="call-summary fu-summary">
+    <div class="call-summary-title">📊 Resumen — Copiar a Odoo</div>
+    <div class="call-summary-row"><span class="call-summary-key">Tipo Interacción:</span><span class="call-summary-val fu-sum-tipo"></span></div>
+    <div class="call-summary-row"><span class="call-summary-key">Nombre Secretaria:</span><span class="call-summary-val fu-sum-secre"></span></div>
+    <div class="call-summary-row"><span class="call-summary-key">Nombre Comprador:</span><span class="call-summary-val fu-sum-comp"></span></div>
+    <div class="call-summary-row"><span class="call-summary-key">Nombre Corto:</span><span class="call-summary-val fu-sum-corto"></span></div>
+    <div class="call-summary-row"><span class="call-summary-key">Correo:</span><span class="call-summary-val fu-sum-correo"></span></div>
+    <div class="call-summary-row"><span class="call-summary-key">Tipo Correo:</span><span class="call-summary-val fu-sum-tipo-correo"></span></div>
+    <div class="call-summary-row"><span class="call-summary-key">Interés Cotización:</span><span class="call-summary-val fu-sum-interes"></span></div>
+    <div class="call-summary-row"><span class="call-summary-key">Método:</span><span class="call-summary-val fu-sum-metodo"></span></div>
+    <span class="call-reset" onclick="fuReset(this)">↺ Nueva llamada</span>
+  </div>
+
+</div>`;
+}
+
+// ── FU HELPER FUNCTIONS ──────────────────────────────────────────────
+function fuWrap(el) { return el.closest('.fu-wrap'); }
+function fuQ(el, cls) { return fuWrap(el).querySelector('.' + cls); }
+function fuQA(el, cls) { return fuWrap(el).querySelectorAll('.' + cls); }
+
+function fuToggle(hdr) {
+  const body = hdr.nextElementSibling;
+  const chev = hdr.querySelector('.call-chev');
+  const open = body.classList.toggle('open');
+  if(chev) chev.classList.toggle('open', open);
+}
+
+function fuUpdateSecre(inp) {
+  const w = fuWrap(inp);
+  const val = inp.value.trim();
+  callState.nombreSecretaria = val;
+  const display = val || '[Nombre]';
+  w.querySelectorAll('.fu-secre-name,.fu-secre-name2,.fu-secre-name3,.fu-secre-name4').forEach(el => el.textContent = display);
+  // Also update LL1 spans
+  callUpdateSecre(val);
+  // Show/hide escenarios
+  if(val) {
+    const a = w.querySelector('.fu-escenario-a'); if(a) a.classList.remove('call-hidden');
+    const b = w.querySelector('.fu-escenario-b'); if(b) b.classList.add('call-hidden');
+  }
+}
+
+function fuUpdateComp(inp) {
+  const w = fuWrap(inp);
+  const val = inp.value.trim();
+  callUpdateComp(val);
+  const full = val || '[Nombre Comprador]';
+  const corto = callState.nombreCorto || '[Nombre]';
+  w.querySelectorAll('.fu-comp-full,.fu-comp-full2').forEach(el => el.textContent = full);
+  w.querySelectorAll('.fu-comp-corto,.fu-comp-corto2,.fu-comp-corto3,.fu-comp-corto4').forEach(el => el.textContent = corto);
+  if(val) {
+    const cc = w.querySelector('.fu-con-comp'); if(cc) cc.classList.remove('call-hidden');
+    const sc = w.querySelector('.fu-sin-comp'); if(sc) sc.classList.add('call-hidden');
+    const b2c = w.querySelector('.fu-b2-con-nombre'); if(b2c) b2c.classList.remove('call-hidden');
+    const b2s = w.querySelector('.fu-b2-sin-nombre'); if(b2s) b2s.classList.add('call-hidden');
+  }
+}
+
+function fuUpdateIntentos(inp) {
+  const w = fuWrap(inp);
+  callState.intentos = parseInt(inp.value) || 0;
+  const tiempo = callState.intentos >= 3 ? 'por varias semanas' : 'desde la semana pasada';
+  w.querySelectorAll('.fu-tiempo,.fu-tiempo2,.fu-tiempo3').forEach(el => el.textContent = tiempo);
+}
+
+function fuB1Select(btn, opt) {
+  const w = fuWrap(btn);
+  w.querySelectorAll('.fu-b1-body .call-opt').forEach(el => el.classList.remove('selected'));
+  btn.classList.add('selected');
+  // Hide all downstream
+  ['fu-noesta','fu-b2','fu-b3','fu-b4','fu-b5','fu-b6'].forEach(cls => {
+    const el = w.querySelector('.' + cls);
+    if(el) { el.classList.add('call-hidden'); const b = el.querySelector('.call-block-body'); if(b) b.classList.remove('open'); }
+  });
+  w.querySelector('.fu-summary').classList.remove('visible');
+
+  if(opt === 'compras') {
+    callState.tipoInteraccion = 'Comprador';
+    const b2 = w.querySelector('.fu-b2');
+    b2.classList.remove('call-hidden');
+    b2.querySelector('.call-block-body').classList.add('open');
+    b2.scrollIntoView({behavior:'smooth', block:'start'});
+  } else {
+    callState.tipoInteraccion = 'Secretaria';
+    const ne = w.querySelector('.fu-noesta');
+    ne.classList.remove('call-hidden');
+    ne.querySelector('.call-block-body').classList.add('open');
+    ne.scrollIntoView({behavior:'smooth', block:'start'});
+  }
+}
+
+function fuNoEstaCorreo(btn, tipo) {
+  const w = fuWrap(btn);
+  w.querySelectorAll('.fu-noesta .call-options .call-opt').forEach(el => el.classList.remove('selected'));
+  btn.classList.add('selected');
+  callState.tipoCorreo = tipo;
+  if(tipo === 'generico') {
+    const pg = w.querySelector('.fu-pedir-correo'); if(pg) pg.classList.remove('call-hidden');
+  }
+  fuGoB6(btn, 'Secretaria');
+}
+
+function fuShowB3(btn) {
+  const w = fuWrap(btn);
+  w.querySelectorAll('.fu-b2 .call-opt').forEach(el => el.classList.remove('selected'));
+  btn.classList.add('selected');
+  callState.interesCotz = 'Si';
+  ['fu-b4','fu-b5','fu-b6'].forEach(cls => { const el=w.querySelector('.'+cls); if(el) el.classList.add('call-hidden'); });
+  const b3 = w.querySelector('.fu-b3');
+  b3.classList.remove('call-hidden');
+  b3.querySelector('.call-block-body').classList.add('open');
+  b3.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function fuNoTime(btn) {
+  const w = fuWrap(btn);
+  w.querySelectorAll('.fu-b2 .call-opt').forEach(el => el.classList.remove('selected'));
+  btn.classList.add('selected');
+  callState.interesCotz = 'No';
+  ['fu-b3','fu-b4','fu-b5'].forEach(cls => { const el=w.querySelector('.'+cls); if(el) el.classList.add('call-hidden'); });
+  fuGoB6(btn, 'Comprador');
+}
+
+function fuShowB4(btn) {
+  const w = fuWrap(btn);
+  w.querySelectorAll('.fu-b3 .call-opt').forEach(el => el.classList.remove('selected'));
+  btn.classList.add('selected');
+  callState.interesCotz = 'Si';
+  ['fu-b5','fu-b6'].forEach(cls => { const el=w.querySelector('.'+cls); if(el) el.classList.add('call-hidden'); });
+  const b4 = w.querySelector('.fu-b4');
+  b4.classList.remove('call-hidden');
+  b4.querySelector('.call-block-body').classList.add('open');
+  b4.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function fuNoPitch(btn) {
+  const w = fuWrap(btn);
+  w.querySelectorAll('.fu-b3 .call-opt').forEach(el => el.classList.remove('selected'));
+  btn.classList.add('selected');
+  callState.interesCotz = 'No';
+  ['fu-b4','fu-b5'].forEach(cls => { const el=w.querySelector('.'+cls); if(el) el.classList.add('call-hidden'); });
+  fuGoB6(btn, 'Comprador');
+}
+
+function fuMetodo(btn, opt) {
+  const w = fuWrap(btn);
+  w.querySelectorAll('.fu-b4 > .call-block-body > .call-options .call-opt').forEach(el => el.classList.remove('selected'));
+  btn.classList.add('selected');
+  callState.metodoCotz = opt === 'productos' ? 'Cotizacion' : 'Pagina';
+  w.querySelector('.fu-productos').classList.add('call-hidden');
+  w.querySelector('.fu-pagina').classList.add('call-hidden');
+  w.querySelector(opt === 'productos' ? '.fu-productos' : '.fu-pagina').classList.remove('call-hidden');
+}
+
+function fuShowB5(btn) {
+  const w = fuWrap(btn);
+  const b5 = w.querySelector('.fu-b5');
+  b5.classList.remove('call-hidden');
+  b5.querySelector('.call-block-body').classList.add('open');
+  b5.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function fuGoB6(btn, tipo) {
+  const w = fuWrap(btn);
+  if(tipo) callState.tipoInteraccion = tipo;
+  const b6 = w.querySelector('.fu-b6');
+  b6.classList.remove('call-hidden');
+  b6.querySelector('.call-block-body').classList.add('open');
+  const c = callState.correo;
+  if(c) { const el = w.querySelector('.fu-correo-b6'); if(el) el.value = c; }
+  b6.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function fuShowSummary(btn) {
+  const w = fuWrap(btn);
+  const c6 = w.querySelector('.fu-correo-b6');
+  if(c6 && c6.value) callState.correo = c6.value;
+  const sum = w.querySelector('.fu-summary');
+  const set = (cls, val) => { const el = sum.querySelector('.' + cls); if(el) el.textContent = val || '—'; };
+  set('fu-sum-tipo', callState.tipoInteraccion);
+  set('fu-sum-secre', callState.nombreSecretaria);
+  set('fu-sum-comp', callState.nombreComprador);
+  set('fu-sum-corto', callState.nombreCorto);
+  set('fu-sum-correo', callState.correo);
+  set('fu-sum-tipo-correo', callState.tipoCorreo === 'directo' ? 'Comprador (directo)' : callState.tipoCorreo === 'generico' ? 'Genérico' : '—');
+  set('fu-sum-interes', callState.interesCotz);
+  set('fu-sum-metodo', callState.metodoCotz);
+  sum.classList.add('visible');
+  sum.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function fuReset(btn) {
+  const pane = fuWrap(btn).closest('.pane');
+  if(pane) pane.innerHTML = renderInteractiveFollowUp(sid);
+}
+
+
+function callUpdateIntentos(val, p) {
+  callState.intentos = parseInt(val) || 0;
+  const tiempo = callState.intentos >= 3 ? 'por varias semanas' : 'desde la semana pasada';
+  p = p || '0';
+  [`${p}-fis-tiempo1`,`${p}-fis-tiempo2`,`${p}-fi-tiempo`].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.textContent = tiempo;
+  });
+}
+
+function followUpShowComp(val, pIn) {
+  const p = pIn || '0';
+  const conComp = document.getElementById(`${p}-fb1-con-comp`);
+  const sinComp = document.getElementById(`${p}-fb1-sin-comp`);
+  if(val && conComp && sinComp) {
+    conComp.classList.remove('call-hidden');
+    sinComp.classList.add('call-hidden');
+  }
+}
+
+function getStepPrefix(el) {
+  // Walk up DOM to find call-wrap and get its step prefix
+  let node = el;
+  while(node && !node.dataset.stepPrefix) node = node.parentElement;
+  return node ? node.dataset.stepPrefix : '0';
+}
+
+function followUpSelectB1(opt, p) {
+  p = p || '0';
+  document.querySelectorAll(`#${p}-cbbfb1 .call-opt`).forEach(el => el.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+  // Hide all downstream
+  ['fb1b','fb2','fb3','fb4','fb5','fb6'].forEach(id => {
+    const el = document.getElementById(`${p}-${id}`);
+    if(el) { el.classList.add('call-hidden'); const b=document.getElementById(`${p}-cbb${id.slice(1)}`); if(b) b.classList.remove('open'); }
+  });
+  const sum = document.getElementById(`${p}-call-summary`);
+  if(sum) sum.classList.remove('visible');
+
+  if(opt === 'compras') {
+    callState.tipoInteraccion = 'Comprador';
+    const fb2 = document.getElementById(`${p}-fb2`);
+    fb2.classList.remove('call-hidden');
+    document.getElementById(`${p}-cbbfb2`).classList.add('open');
+    document.getElementById(`${p}-ccfb2`).classList.add('open');
+    const corto = callState.nombreCorto;
+    if(corto) {
+      document.getElementById(`${p}-fcs2a`).classList.remove('call-hidden');
+      document.getElementById(`${p}-fcs2b`).classList.add('call-hidden');
+    } else {
+      document.getElementById(`${p}-fcs2a`).classList.add('call-hidden');
+      document.getElementById(`${p}-fcs2b`).classList.remove('call-hidden');
+    }
+    fb2.scrollIntoView({behavior:'smooth', block:'start'});
+  } else {
+    callState.tipoInteraccion = 'Secretaria';
+    const fb1b = document.getElementById(`${p}-fb1b`);
+    fb1b.classList.remove('call-hidden');
+    document.getElementById(`${p}-cbbfb1b`).classList.add('open');
+    document.getElementById(`${p}-ccfb1b`).classList.add('open');
+    fb1b.scrollIntoView({behavior:'smooth', block:'start'});
+  }
+}
+
+function followUpShowB3(p) {
+  p = p || '0';
+  document.querySelectorAll(`#${p}-cbbfb2 .call-opt`).forEach(el => el.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+  callState.interesCotz = 'Si';
+  ['fb4','fb5','fb6'].forEach(id => { const el=document.getElementById(`${p}-${id}`); if(el){el.classList.add('call-hidden');} });
+  const sum=document.getElementById(`${p}-call-summary`); if(sum) sum.classList.remove('visible');
+  const fb3 = document.getElementById(`${p}-fb3`);
+  fb3.classList.remove('call-hidden');
+  document.getElementById(`${p}-cbbfb3`).classList.add('open');
+  document.getElementById(`${p}-ccfb3`).classList.add('open');
+  fb3.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function followUpNoTime(p) {
+  p = p || '0';
+  document.querySelectorAll(`#${p}-cbbfb2 .call-opt`).forEach(el => el.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+  callState.interesCotz = 'No';
+  ['fb3','fb4','fb5'].forEach(id => { const el=document.getElementById(`${p}-${id}`); if(el){el.classList.add('call-hidden');} });
+  followUpGoB6('Comprador','',p);
+}
+
+function followUpShowB4(p) {
+  p = p || '0';
+  document.querySelectorAll(`#${p}-cbbfb3 .call-opt`).forEach(el => el.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+  callState.interesCotz = 'Si';
+  ['fb5','fb6'].forEach(id => { const el=document.getElementById(`${p}-${id}`); if(el){el.classList.add('call-hidden');} });
+  const sum=document.getElementById(`${p}-call-summary`); if(sum) sum.classList.remove('visible');
+  const fb4 = document.getElementById(`${p}-fb4`);
+  fb4.classList.remove('call-hidden');
+  document.getElementById(`${p}-cbbfb4`).classList.add('open');
+  document.getElementById(`${p}-ccfb4`).classList.add('open');
+  fb4.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function followUpNoPitch(p) {
+  p = p || '0';
+  document.querySelectorAll(`#${p}-cbbfb3 .call-opt`).forEach(el => el.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+  callState.interesCotz = 'No';
+  ['fb4','fb5'].forEach(id => { const el=document.getElementById(`${p}-${id}`); if(el){el.classList.add('call-hidden');} });
+  followUpGoB6('Comprador','',p);
+}
+
+function followUpSelectMetodo(opt, p) {
+  p = p || '0';
+  document.querySelectorAll(`#${p}-cbbfb4 > .call-options .call-opt`).forEach(el => el.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+  callState.metodoCotz = opt === 'productos' ? 'Cotizacion' : 'Pagina';
+  document.getElementById(`${p}-fb4-productos`).classList.add('call-hidden');
+  document.getElementById(`${p}-fb4-pagina`).classList.add('call-hidden');
+  document.getElementById(opt === 'productos' ? `${p}-fb4-productos` : `${p}-fb4-pagina`).classList.remove('call-hidden');
+}
+
+function followUpShowB5(p) {
+  p = p || '0';
+  const fb5 = document.getElementById(`${p}-fb5`);
+  fb5.classList.remove('call-hidden');
+  document.getElementById(`${p}-cbbfb5`).classList.add('open');
+  document.getElementById(`${p}-ccfb5`).classList.add('open');
+  fb5.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function followUpGoB6(tipo, tipoCorreo, pIn) {
+  if(tipo) callState.tipoInteraccion = tipo;
+  if(tipoCorreo) callState.tipoCorreo = tipoCorreo;
+  const p = pIn || '0';
+  if(event && event.currentTarget) {
+    const parent = event.currentTarget.closest('.call-options');
+    if(parent) parent.querySelectorAll('.call-opt').forEach(el => el.classList.remove('selected'));
+    event.currentTarget.classList.add('selected');
+  }
+  const fb6 = document.getElementById(`${p}-fb6`);
+  fb6.classList.remove('call-hidden');
+  document.getElementById(`${p}-cbbfb6`).classList.add('open');
+  document.getElementById(`${p}-ccfb6`).classList.add('open');
+  const c = callState.correo;
+  if(c) { const el=document.getElementById(`${p}-fi-correo5`); if(el) el.value=c; }
+  fb6.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function followUpReset(p) {
+  p = p || '0';
+  const pane = document.getElementById(`pc-${p.replace('s','')}`); // p='s5' → pane id='pc-5'
+  if(pane) pane.innerHTML = renderInteractiveFollowUp(p);
+}
+
+
+function callReset() {
+  Object.assign(callState, {
+    nombreSecretaria:'', nombreComprador:'', nombreCorto:'',
+    correo:'', tipoInteraccion:'', interesCotz:'', metodoCotz:'',
+    productos: Array(14).fill(''), bloque: 1
+  });
+  const pane = document.querySelector('#sb-300 .pane');
+  if(pane) pane.innerHTML = renderInteractiveCall();
+}
+
+function toggleCard(id){
+  document.getElementById('sb-'+id).classList.toggle('open');
+  document.getElementById('chev-'+id).classList.toggle('open');
+}
+
+function switchTab(id,showId,hideId,el){
+  document.getElementById(showId+'-'+id).classList.add('active');
+  document.getElementById(hideId+'-'+id).classList.remove('active');
+  el.closest('.tab-bar').querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+renderSteps();
+
+function toggleSidebar() {
+  const layout = document.getElementById('layout');
+  const btn = document.getElementById('collapseBtn');
+  const collapsed = layout.classList.toggle('collapsed');
+  btn.textContent = collapsed ? '▶' : '◀';
+  btn.style.left = collapsed ? '8px' : '244px';
+}
+</script>
+</body>
+</html>
