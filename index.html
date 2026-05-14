@@ -2355,9 +2355,17 @@ function getFU(el, id) {
 }
 
 function renderInteractiveFollowUp(sid) {
-  const tiempoPrev = (callState.intentos || 0) >= 3
-  ? 'por varias semanas'
-  : 'desde la semana pasada';
+
+  const secre = callState.nombreSecretaria || '';
+  const comp = callState.nombreComprador || '';
+  const corto = callState.nombreCorto || '';
+  const intentos = callState.intentos || 0;
+  const tiempoPrev = intentos >= 3
+    ? 'por varias semanas'
+    : 'desde la semana pasada';
+
+  const correo = callState.correo || '';
+  const tipoCorreo = callState.tipoCorreo || '';
 
   return `<div class="call-wrap fu-wrap">
 
@@ -2987,31 +2995,31 @@ window.addEventListener("load", function() {
 
     setTimeout(function() {
 
-        const secreInput = document.querySelector(".fu-secre-input");
-        if (secreInput) {
-            secreInput.value = secretaria;
-            secreInput.dispatchEvent(new Event('input'));
-        }
+    const secreInput = document.querySelector(".fu-secre-input");
+    if (secreInput) {
+        secreInput.value = secretaria;
+        secreInput.dispatchEvent(new Event('input'));
+    }
 
-        const compInput = document.querySelector(".fu-comp-input");
-        if (compInput) {
-            compInput.value = comprador;
-            compInput.dispatchEvent(new Event('input'));
-        }
+    const compInput = document.querySelector(".fu-comp-input");
+    if (compInput) {
+        compInput.value = comprador;
+        compInput.dispatchEvent(new Event('input'));
+    }
 
-        const correoInput = document.querySelector(".fu-correo-input");
-        if (correoInput) {
-            correoInput.value = correo;
-            correoInput.dispatchEvent(new Event('input'));
-        }
+    const correoInput = document.querySelector(".fu-correo-input");
+    if (correoInput) {
+        correoInput.value = correo;
+        correoInput.dispatchEvent(new Event('input'));
+    }
 
-        const intentosInput = document.querySelector('input[type="number"]');
-        if (intentosInput) {
-            intentosInput.value = intentos;
-            intentosInput.dispatchEvent(new Event('input'));
-        }
+    const intentosInput = document.querySelector('input[type="number"]');
+    if (intentosInput) {
+        intentosInput.value = intentos;
+        intentosInput.dispatchEvent(new Event('input'));
+    }
 
-    }, 500);
+}, 500);
 
 });
 </script> 
