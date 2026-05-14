@@ -2355,13 +2355,9 @@ function getFU(el, id) {
 }
 
 function renderInteractiveFollowUp(sid) {
-  const secre = callState.nombreSecretaria || '';
-  const comp = callState.nombreComprador || '';
-  const corto = callState.nombreCorto || '';
-  const intentos = callState.intentos || 0;
-  const tiempoPrev = intentos >= 3 ? 'por varias semanas' : 'desde la semana pasada';
-  const correo = callState.correo || '';
-  const tipoCorreo = callState.tipoCorreo || '';
+  const tiempoPrev = (callState.intentos || 0) >= 3
+  ? 'por varias semanas'
+  : 'desde la semana pasada';
 
   return `<div class="call-wrap fu-wrap">
 
@@ -2373,19 +2369,19 @@ function renderInteractiveFollowUp(sid) {
     <div class="call-block-body open">
       <div class="call-input-row">
         <span class="call-input-label">Nombre Secretaria:</span>
-        <input class="call-input fu-secre-input" placeholder="Si lo tenemos" value="${secre}" oninput="fuUpdateSecre(this)">
+        <input class="call-input fu-secre-input" placeholder="Si lo tenemos" value="${callState.nombreSecretaria || ''}" oninput="fuUpdateSecre(this)">
       </div>
       <div class="call-input-row">
         <span class="call-input-label">Nombre Comprador:</span>
-        <input class="call-input fu-comp-input" placeholder="Si lo tenemos" value="${comp}" oninput="fuUpdateComp(this)">
+        <input class="call-input fu-comp-input" placeholder="Si lo tenemos" value="${callState.nombreComprador || ''}" oninput="fuUpdateComp(this)">
       </div>
       <div class="call-input-row">
         <span class="call-input-label">Correo:</span>
-        <input class="call-input fu-correo-input" placeholder="Si lo tenemos" value="${correo}" oninput="callSave('correo',this.value)">
+        <input class="call-input fu-correo-input" placeholder="Si lo tenemos" value="${callState.correo || ''}" oninput="callSave('correo',this.value)">
       </div>
       <div class="call-input-row">
         <span class="call-input-label">Intentos anteriores:</span>
-        <input class="call-input" style="max-width:80px" placeholder="0" value="${intentos}" type="number" min="0" oninput="fuUpdateIntentos(this)">
+        <input class="call-input" style="max-width:80px" placeholder="0" value="${callState.intentos || 0}" type="number" min="0" oninput="fuUpdateIntentos(this)">
       </div>
       <div class="call-note">Texto ajustado: "<span class="fu-tiempo">${tiempoPrev}</span>"</div>
     </div>
