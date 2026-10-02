@@ -2068,6 +2068,8 @@ function renderInteractiveCall() {
       ✅&nbsp; Bloque 6 — Cierre <span class="call-chev" id="cc6">▾</span>
     </div>
     <div class="call-block-body" id="cbb6">
+      <div class="call-script">"¿Me podrás compartir tu correo para enviarte la información?"</div>
+      <div class="call-pause">⏸ ESCUCHAR</div>
       <div class="call-input-row">
         <span class="call-input-label">Correo:</span>
         <input class="call-input" id="ci-correo6" placeholder="correo@empresa.com" oninput="callSave('correo',this.value)">
@@ -2153,6 +2155,11 @@ function callUpdateComp(val) {
   document.querySelectorAll('[id$="-fis-comp1"],[id$="-fis-comp2"],[id$="-fis-comp3"],[id$="-fis-comp4"]').forEach(el => el.textContent = val.trim() || '[Nombre Comprador]');
   document.querySelectorAll('[id$="-fis-comp5"],[id$="-fis-comp6"]').forEach(el => el.textContent = callState.nombreCorto || '[Nombre]');
   document.querySelectorAll('.cis-comprador-corto').forEach(el => el.textContent = callState.nombreCorto || '[Nombre]');
+  // Also update non-prefixed (LL1)
+  const fullDisplay = val.trim() || '[Nombre Comprador]';
+  const shortDisplay = callState.nombreCorto || '[Nombre]';
+  ['cis-comp1'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent = fullDisplay; });
+  ['cis-comp2','cis-comp3','cis-comp4','cis-comp5','cis-comp6'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent = shortDisplay; });
 }
 
 
@@ -2193,7 +2200,6 @@ function callSelectB1(opt) {
       document.getElementById('cs2a').classList.remove('call-hidden');
       document.getElementById('cs2b').classList.add('call-hidden');
     }
-    cb2.scrollIntoView({behavior:'smooth', block:'start'});
   } else {
     callState.tipoInteraccion = 'Secretaria';
     const cb1b = document.getElementById('cb1b');
@@ -2201,7 +2207,6 @@ function callSelectB1(opt) {
     const body1b = document.getElementById('cbb1b');
     body1b.classList.add('open');
     document.getElementById('cc1b').classList.add('open');
-    cb1b.scrollIntoView({behavior:'smooth', block:'start'});
   }
 }
 
@@ -2220,7 +2225,6 @@ function callShowB3() {
   const body3 = document.getElementById('cbb3');
   body3.classList.add('open');
   document.getElementById('cc3').classList.add('open');
-  cb3.scrollIntoView({behavior:'smooth', block:'start'});
 }
 
 function callNoTime() {
@@ -2249,7 +2253,6 @@ function callShowB4() {
   const body4 = document.getElementById('cbb4');
   body4.classList.add('open');
   document.getElementById('cc4').classList.add('open');
-  cb4.scrollIntoView({behavior:'smooth', block:'start'});
 }
 
 function callNoPitch() {
@@ -2282,7 +2285,6 @@ function callShowB5() {
   const body5 = document.getElementById('cbb5');
   body5.classList.add('open');
   document.getElementById('cc5').classList.add('open');
-  cb5.scrollIntoView({behavior:'smooth', block:'start'});
 }
 
 function callNoEstaCorreo(tipo) {
@@ -2315,7 +2317,6 @@ function callGoB6(tipo) {
     const c6 = document.getElementById('ci-correo6');
     if(c6) c6.value = callState.correo;
   }
-  cb6.scrollIntoView({behavior:'smooth', block:'start'});
 }
 
 function callShowSummary(pIn) {
@@ -2341,7 +2342,6 @@ function callShowSummary(pIn) {
     if(pv) pv.textContent = prods.join(' / ');
   }
   wrap.classList.add('visible');
-  wrap.scrollIntoView({behavior:'smooth', block:'start'});
 }
 
 
@@ -2585,6 +2585,8 @@ function renderInteractiveFollowUp(sid) {
       ✅&nbsp; Bloque 6 — Cierre <span class="call-chev">▾</span>
     </div>
     <div class="call-block-body">
+      <div class="call-script">"¿Me podrás compartir tu correo para enviarte la información?"</div>
+      <div class="call-pause">⏸ ESCUCHAR</div>
       <div class="call-input-row">
         <span class="call-input-label">Correo:</span>
         <input class="call-input fu-correo-b6" placeholder="correo@empresa.com" oninput="callSave('correo',this.value)">
@@ -2681,13 +2683,11 @@ function fuB1Select(btn, opt) {
     const b2 = w.querySelector('.fu-b2');
     b2.classList.remove('call-hidden');
     b2.querySelector('.call-block-body').classList.add('open');
-    b2.scrollIntoView({behavior:'smooth', block:'start'});
   } else {
     callState.tipoInteraccion = 'Secretaria';
     const ne = w.querySelector('.fu-noesta');
     ne.classList.remove('call-hidden');
     ne.querySelector('.call-block-body').classList.add('open');
-    ne.scrollIntoView({behavior:'smooth', block:'start'});
   }
 }
 
@@ -2711,7 +2711,6 @@ function fuShowB3(btn) {
   const b3 = w.querySelector('.fu-b3');
   b3.classList.remove('call-hidden');
   b3.querySelector('.call-block-body').classList.add('open');
-  b3.scrollIntoView({behavior:'smooth', block:'start'});
 }
 
 function fuNoTime(btn) {
@@ -2732,7 +2731,6 @@ function fuShowB4(btn) {
   const b4 = w.querySelector('.fu-b4');
   b4.classList.remove('call-hidden');
   b4.querySelector('.call-block-body').classList.add('open');
-  b4.scrollIntoView({behavior:'smooth', block:'start'});
 }
 
 function fuNoPitch(btn) {
@@ -2759,7 +2757,6 @@ function fuShowB5(btn) {
   const b5 = w.querySelector('.fu-b5');
   b5.classList.remove('call-hidden');
   b5.querySelector('.call-block-body').classList.add('open');
-  b5.scrollIntoView({behavior:'smooth', block:'start'});
 }
 
 function fuGoB6(btn, tipo) {
@@ -2770,7 +2767,6 @@ function fuGoB6(btn, tipo) {
   b6.querySelector('.call-block-body').classList.add('open');
   const c = callState.correo;
   if(c) { const el = w.querySelector('.fu-correo-b6'); if(el) el.value = c; }
-  b6.scrollIntoView({behavior:'smooth', block:'start'});
 }
 
 function fuShowSummary(btn) {
@@ -2788,7 +2784,6 @@ function fuShowSummary(btn) {
   set('fu-sum-interes', callState.interesCotz);
   set('fu-sum-metodo', callState.metodoCotz);
   sum.classList.add('visible');
-  sum.scrollIntoView({behavior:'smooth', block:'start'});
 }
 
 function fuReset(btn) {
@@ -2850,14 +2845,12 @@ function followUpSelectB1(opt, p) {
       document.getElementById(`${p}-fcs2a`).classList.add('call-hidden');
       document.getElementById(`${p}-fcs2b`).classList.remove('call-hidden');
     }
-    fb2.scrollIntoView({behavior:'smooth', block:'start'});
   } else {
     callState.tipoInteraccion = 'Secretaria';
     const fb1b = document.getElementById(`${p}-fb1b`);
     fb1b.classList.remove('call-hidden');
     document.getElementById(`${p}-cbbfb1b`).classList.add('open');
     document.getElementById(`${p}-ccfb1b`).classList.add('open');
-    fb1b.scrollIntoView({behavior:'smooth', block:'start'});
   }
 }
 
@@ -2872,7 +2865,6 @@ function followUpShowB3(p) {
   fb3.classList.remove('call-hidden');
   document.getElementById(`${p}-cbbfb3`).classList.add('open');
   document.getElementById(`${p}-ccfb3`).classList.add('open');
-  fb3.scrollIntoView({behavior:'smooth', block:'start'});
 }
 
 function followUpNoTime(p) {
@@ -2895,7 +2887,6 @@ function followUpShowB4(p) {
   fb4.classList.remove('call-hidden');
   document.getElementById(`${p}-cbbfb4`).classList.add('open');
   document.getElementById(`${p}-ccfb4`).classList.add('open');
-  fb4.scrollIntoView({behavior:'smooth', block:'start'});
 }
 
 function followUpNoPitch(p) {
@@ -2923,7 +2914,6 @@ function followUpShowB5(p) {
   fb5.classList.remove('call-hidden');
   document.getElementById(`${p}-cbbfb5`).classList.add('open');
   document.getElementById(`${p}-ccfb5`).classList.add('open');
-  fb5.scrollIntoView({behavior:'smooth', block:'start'});
 }
 
 function followUpGoB6(tipo, tipoCorreo, pIn) {
@@ -2941,7 +2931,6 @@ function followUpGoB6(tipo, tipoCorreo, pIn) {
   document.getElementById(`${p}-ccfb6`).classList.add('open');
   const c = callState.correo;
   if(c) { const el=document.getElementById(`${p}-fi-correo5`); if(el) el.value=c; }
-  fb6.scrollIntoView({behavior:'smooth', block:'start'});
 }
 
 function followUpReset(p) {
